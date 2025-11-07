@@ -23,7 +23,7 @@ Get pyinit up and running in 3 simple steps:
 ### 1️⃣ Clone the Repository
 
 ```bash
-git clone https://github.com/karimmohamed-ottf/pyinit.git
+git clone https://github.com/mrbooo895/pyinit.git
 cd pyinit
 ```
 
