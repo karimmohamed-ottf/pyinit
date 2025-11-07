@@ -1,9 +1,12 @@
-import sys
 import subprocess
+import sys
 import time
+
 from rich.console import Console
+
 from .utils import find_project_root
 from .wrappers import error_handling
+
 
 @error_handling
 def add_git_hooks():
@@ -11,16 +14,22 @@ def add_git_hooks():
     project_root = find_project_root()
 
     if not project_root:
-        console.print("[bold red][ERROR][/bold red] Not inside a project. Could not find 'pyproject.toml'.")
+        console.print(
+            "[bold red][ERROR][/bold red] Not inside a project. Could not find 'pyproject.toml'."
+        )
         sys.exit(1)
 
     if not (project_root / ".git").is_dir():
-        console.print("[bold red][ERROR][/bold red] This is not a Git repository. Please run 'git init' first.")
+        console.print(
+            "[bold red][ERROR][/bold red] This is not a Git repository. Please run 'git init' first."
+        )
         sys.exit(1)
-        
+
     venv_dir = project_root / "venv"
     if not venv_dir.exists():
-        console.print("[bold red][ERROR][/bold red] Virtual environment 'venv' not found.")
+        console.print(
+            "[bold red][ERROR][/bold red] Virtual environment 'venv' not found."
+        )
         sys.exit(1)
 
     if sys.platform == "win32":
@@ -34,28 +43,38 @@ def add_git_hooks():
 
     console.print("[bold green]    Checking[/bold green] for 'pre-commit' framework")
     time.sleep(0.25)
-    
+
     check_tool_cmd = [str(python_executable), "-c", "import pre_commit"]
     tool_installed = subprocess.run(check_tool_cmd, capture_output=True).returncode == 0
-    
+
     if not tool_installed:
-        console.print("[bold green]     Installing[/bold green] required module 'pre-commit'")
+        console.print(
+            "[bold green]     Installing[/bold green] required module 'pre-commit'"
+        )
         install_cmd = [str(pip_executable), "install", "pre-commit"]
         try:
             subprocess.run(install_cmd, check=True, capture_output=True)
-            console.print("[bold green]    Successfully[/bold green] installed 'pre-commit'")
+            console.print(
+                "[bold green]    Successfully[/bold green] installed 'pre-commit'"
+            )
         except subprocess.CalledProcessError as e:
-            console.print(f"[bold red][ERROR][/bold red] Failed to install pre-commit: {e.stderr.decode()}")
+            console.print(
+                f"[bold red][ERROR][/bold red] Failed to install pre-commit: {e.stderr.decode()}"
+            )
             sys.exit(1)
-            
+
     config_file_path = project_root / ".pre-commit-config.yaml"
     if config_file_path.exists():
-        confirm = console.input("[bold yellow][WARNING][/] a '.pre-commit-config.yaml' already exists. Overwrite? (y/N): ")
-        if confirm.lower() != 'y':
+        confirm = console.input(
+            "[bold yellow][WARNING][/] a '.pre-commit-config.yaml' already exists. Overwrite? (y/N): "
+        )
+        if confirm.lower() != "y":
             console.print("[bold yellow]Operation cancelled.[/bold yellow]")
             sys.exit(0)
 
-    console.print("[bold green]      Creating[/bold green] default pre-commit configuration")
+    console.print(
+        "[bold green]      Creating[/bold green] default pre-commit configuration"
+    )
     time.sleep(0.25)
 
     config_content = """\
@@ -89,15 +108,21 @@ repos:
 
     with open(config_file_path, "w") as f:
         f.write(config_content)
-    
-    console.print("[bold green]       Installing[/bold green] git hooks into '.git/' directory")
+
+    console.print(
+        "[bold green]       Installing[/bold green] git hooks into '.git/' directory"
+    )
     time.sleep(0.25)
-    
+
     try:
         install_hooks_cmd = [str(pre_commit_executable), "install"]
-        subprocess.run(install_hooks_cmd, cwd=project_root, check=True, capture_output=True)
+        subprocess.run(
+            install_hooks_cmd, cwd=project_root, check=True, capture_output=True
+        )
     except subprocess.CalledProcessError as e:
-        console.print(f"[bold red][ERROR][/bold red] Failed to install git hooks: {e.stderr.decode()}")
+        console.print(
+            f"[bold red][ERROR][/bold red] Failed to install git hooks: {e.stderr.decode()}"
+        )
         sys.exit(1)
 
     console.print("\n[bold green]Successfully[/bold green] set up pre-commit hooks.\n")

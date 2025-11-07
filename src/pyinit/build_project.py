@@ -2,9 +2,12 @@ import os
 import subprocess
 import sys
 import time
+
 from rich.console import Console
+
 from .utils import find_project_root, get_project_name
 from .wrappers import error_handling
+
 
 @error_handling
 def install_project():
@@ -12,14 +15,18 @@ def install_project():
     project_root = find_project_root()
 
     if not project_root:
-        console.print(f"[bold red][ERROR][/bold red] Not inside a project. Could not find 'pyproject.toml'.")
+        console.print(
+            f"[bold red][ERROR][/bold red] Not inside a project. Could not find 'pyproject.toml'."
+        )
         sys.exit(1)
 
     venv_dir = project_root / "venv"
 
     project_name = get_project_name(project_root)
     if not project_name:
-        console.print(f"[dim yellow]\n[WARNING][/dim yellow] Could not determine project name from 'pyproject.toml'\n")
+        console.print(
+            f"[dim yellow]\n[WARNING][/dim yellow] Could not determine project name from 'pyproject.toml'\n"
+        )
 
     if sys.platform == "win32":
         python_executable = venv_dir / "Scripts" / "python.exe"
@@ -33,18 +40,24 @@ def install_project():
         time.sleep(0.25)
         subprocess.run(
             [str(pip_executable), "install", "build", "wheel"],
-            check=True, capture_output=True
+            check=True,
+            capture_output=True,
         )
 
-        console.print(f"[bold green]     Building[/bold green] package '{project_name}'") 
+        console.print(
+            f"[bold green]     Building[/bold green] package '{project_name}'"
+        )
         time.sleep(0.25)
         subprocess.run(
             [str(python_executable), "-m", "build"],
             cwd=project_root,
-            check=True, capture_output=True
+            check=True,
+            capture_output=True,
         )
 
-        console.print(f"[bold green]\nSuccessfully[/bold green] built package '{project_name}'") 
+        console.print(
+            f"[bold green]\nSuccessfully[/bold green] built package '{project_name}'"
+        )
         console.print(f"[bold green]->[/] Check 'dist/' for results")
 
     except subprocess.CalledProcessError as e:
