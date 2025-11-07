@@ -1,6 +1,7 @@
 # Virtual Environment
 venv/
 __pycache__/
+**/__pycache__
 *.pyc
 
 # IDE Specific Files
@@ -11,5 +12,5 @@ __pycache__/
 dist/
 build/
 *.egg-info/
-*/*.egg-info/
+**/*egg-info/
 """
