@@ -9,7 +9,7 @@ from .wrappers import error_handling
 
 
 @error_handling
-def install_project():
+def build_project():
     console = Console()
     project_root = find_project_root()
 

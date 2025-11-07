@@ -14,7 +14,7 @@ else:
 
 
 @error_handling
-def bump_project_version(part: str):
+def increase_version(part: str):
     console = Console()
     project_root = find_project_root()
 

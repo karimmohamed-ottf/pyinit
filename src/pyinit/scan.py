@@ -83,7 +83,7 @@ class ProjectScanner:
             return True, ""
         return (
             False,
-            "[bold yellow]WARNING:[/] 'tests' directory not found. Consider adding tests for your project.",
+            "[bold yellow]WARNING:[/] 'tests' directory not found.",
         )
 
     def check_dependencies_synced(self):

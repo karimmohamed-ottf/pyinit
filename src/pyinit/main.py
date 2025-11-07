@@ -1,24 +1,24 @@
 import argparse
 import sys
 
-from .add_module import install_module
-from .build_project import install_project
-from .bump_project import bump_project_version
-from .clean_project import clean_project
-from .dockerize_project import dockerize_project
-from .env_manager import manage_env
-from .format_project import format_project
-from .graph_project import show_dependency_graph
-from .hooks_manager import add_git_hooks
-from .init_project import initialize_project
-from .lint_project import lint_project
-from .lock_project import lock_dependencies
-from .new_project import create_project
-from .run_project import start_project
-from .scan_project import scan_project
-from .test_project import run_tests
-from .update_project import update_dependencies
-from .venv_manager import manage_venv
+from .add import add_module
+from .build import build_project
+from .bump import increase_version
+from .clean import clean_project
+from .docker import gen_docker_files
+from .env import manage_env
+from .lock import lock_dependencies
+from .format import format_project
+from .hooks import add_git_hooks
+from .init import initialize_project
+from .graph import show_dependency_graph
+from .lint import lint_project
+from .new import create_project
+from .run import run_project
+from .scan import scan_project
+from .test import run_tests
+from .update import update_modules
+from .venv import manage_venv
 from .wrappers import error_handling
 
 
@@ -121,11 +121,11 @@ def main():
         case "new":
             create_project(args.project_name, args.template)
         case "run":
-            start_project(sub_args)
+            run_project(sub_args)
         case "add":
-            install_module(args.module_name)
+            add_module(args.module_name)
         case "build":
-            install_project()
+            build_project()
         case "init":
             initialize_project()
         case "test":
@@ -143,13 +143,13 @@ def main():
         case "clean":
             clean_project()
         case "bump":
-            bump_project_version(args.part)
+            increase_version(args.part)
         case "update":
-            update_dependencies(args.upgrade)
+            update_modules(args.upgrade)
         case "scan":
             scan_project()
         case "dockerize":
-            dockerize_project()
+            gen_docker_files()
         case "env":
             match args.env_command:
                 case "set":

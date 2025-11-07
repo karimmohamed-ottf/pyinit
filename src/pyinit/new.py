@@ -22,7 +22,7 @@ def get_git_config(key):
         return None
 
 
-def copy_and_process_template(template_path: Path, dest_path: Path, replacements: dict):
+def process_template(template_path: Path, dest_path: Path, replacements: dict):
     for item in template_path.rglob("*"):
         relative_path = item.relative_to(template_path)
 
@@ -83,7 +83,7 @@ def create_project(project_path, template_name):
             "##AUTHOR_EMAIL##": author_email,
         }
 
-        copy_and_process_template(template_dir, project_root, replacements)
+        process_template(template_dir, project_root, replacements)
         venv.create(project_root / "venv", with_pip=True)
         subprocess.run(
             ["git", "init"], cwd=project_root, check=True, capture_output=True

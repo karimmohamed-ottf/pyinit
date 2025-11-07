@@ -21,7 +21,7 @@ def get_python_version_from_specifier(specifier: str) -> str:
 
 
 @error_handling
-def dockerize_project():
+def gen_docker_files():
     console = Console()
     project_root = find_project_root()
 

@@ -11,7 +11,7 @@ console = Console()
 
 
 @error_handling
-def start_project(app_args: list = None):
+def run_project(app_args: list = None):
     project_root = find_project_root()
     if not app_args:
         app_args = []

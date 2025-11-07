@@ -8,7 +8,7 @@ from pathlib import Path
 
 from rich.console import Console
 
-from .new_project import TEMPLATES_BASE_DIR, copy_and_process_template, get_git_config
+from .new import TEMPLATES_BASE_DIR, process_template, get_git_config
 from .wrappers import error_handling
 
 
@@ -87,7 +87,7 @@ def initialize_project():
             "##AUTHOR_EMAIL##": author_email,
         }
 
-        copy_and_process_template(template_dir, project_root, replacements)
+        process_template(template_dir, project_root, replacements)
 
         if python_files_to_move:
             console.print(
