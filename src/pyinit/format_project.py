@@ -38,14 +38,12 @@ def format_project():
         subprocess.run(check_formatters_cmd, capture_output=True).returncode == 0
     )
 
-    console.print(
-        f"[bold green]    Starting[/bold green] to format project's structure"
-    )
+    console.print("[bold green]    Starting[/bold green] to format project's structure")
     time.sleep(0.5)
 
     if not formatters_installed:
         console.print(
-            f"[bold green]     Installing[/bold green] Required formatting modules 'black' and 'isort'"
+            "[bold green]     Installing[/bold green] Required formatting modules 'black' and 'isort'"
         )
         time.sleep(0.5)
         install_cmd = [str(pip_executable), "install", "black", "isort"]
@@ -56,7 +54,7 @@ def format_project():
             )
         except subprocess.CalledProcessError as e:
             console.print(
-                f"[bold red][ERROR][/bold red] Failed to install formatting tools."
+                "[bold red][ERROR][/bold red] Failed to install formatting tools."
             )
             console.print(f"[red]{e.stderr.decode()}[/red]")
             sys.exit(1)

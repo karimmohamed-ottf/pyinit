@@ -1,7 +1,6 @@
 import shutil
 import sys
 import time
-from pathlib import Path
 
 from rich.console import Console
 
@@ -64,7 +63,7 @@ def clean_project():
         )
         sys.exit(0)
 
-    console.print(f"[bold green]\n     Cleaning[/bold green] project...")
+    console.print("[bold green]\n     Cleaning[/bold green] project...")
     time.sleep(0.25)
 
     deleted_count = 0

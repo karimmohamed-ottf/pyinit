@@ -41,7 +41,7 @@ def show_dependency_graph():
 
     if not tool_installed:
         console.print(
-            f"[bold green]     Installing[/bold green] Required Module 'pipdeptree'"
+            "[bold green]     Installing[/bold green] Required Module 'pipdeptree'"
         )
         install_cmd = [str(pip_executable), "install", "pipdeptree"]
         try:
@@ -50,11 +50,11 @@ def show_dependency_graph():
                 "[bold green]      Successfully[/bold green] installed 'pipdeptree'"
             )
         except subprocess.CalledProcessError as e:
-            console.print(f"[bold red][ERROR][/bold red] Failed to install pipdeptree.")
+            console.print("[bold red][ERROR][/bold red] Failed to install pipdeptree.")
             console.print(f"[red]{e.stderr.decode()}[/red]")
             sys.exit(1)
     else:
-        console.print(f"[bold green]     Found[/bold green] Module 'pipdeptree'")
+        console.print("[bold green]     Found[/bold green] Module 'pipdeptree'")
         time.sleep(0.5)
 
     console.print("[bold green]\nGenerating[/bold green] dependency graph...\n")
@@ -64,4 +64,4 @@ def show_dependency_graph():
 
     subprocess.run(graph_cmd)
 
-    console.print(f"\n[bold green]Graph[/bold green] generation completed.")
+    console.print("\n[bold green]Graph[/bold green] generation completed.")

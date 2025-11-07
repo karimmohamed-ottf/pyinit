@@ -47,7 +47,7 @@ def manage_env(vars_to_set: list):
                     key, value = line.split("=", 1)
                     env_vars[key.strip()] = value.strip()
 
-    console.print(f"[bold green]    Updating[/bold green] '.env' file")
+    console.print("[bold green]    Updating[/bold green] '.env' file")
     time.sleep(0.25)
 
     for var in vars_to_set:

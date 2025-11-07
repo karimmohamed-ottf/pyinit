@@ -1,4 +1,3 @@
-import os
 import subprocess
 import sys
 import time
@@ -16,7 +15,7 @@ def install_module(module_to_install):
 
     if not project_root:
         console.print(
-            f"[bold red][ERROR][/bold red] Not inside a project. Could not find 'pyproject.toml'."
+            "[bold red][ERROR][/bold red] Not inside a project. Could not find 'pyproject.toml'."
         )
         sys.exit(1)
 
@@ -46,7 +45,7 @@ def install_module(module_to_install):
         console.print(
             f"[bold green]Successfully[/bold green] Installed '{module_name}'"
         )
-    except Exception as e:
+    except Exception:
         console.print(
             f"\n[bold red][ERROR][/bold red] Failed To Install Module: {module_name}"
         )

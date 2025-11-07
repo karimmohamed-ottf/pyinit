@@ -9,9 +9,11 @@ from .wrappers import error_handling
 
 
 @error_handling
-def lint_project(lint_args: list):
+def lint_project(lint_args: list = None):
     console = Console()
     project_root = find_project_root()
+    if not lint_args:
+        lint_args = []
 
     if not project_root:
         console.print(
@@ -43,41 +45,41 @@ def lint_project(lint_args: list):
 
     if not linter_installed:
         console.print(
-            f"[bold green]     Installing[/bold green] Required Linting Module 'ruff'"
+            "[bold green]     Installing[/bold green] Required Linting Module 'ruff'"
         )
         install_cmd = [str(pip_executable), "install", "ruff"]
         try:
             subprocess.run(install_cmd, check=True, capture_output=True)
             console.print("[bold green]Successfully[/bold green] installed 'ruff'")
         except subprocess.CalledProcessError as e:
-            console.print(f"[bold red][ERROR][/bold red] Failed to install ruff.")
+            console.print("[bold red][ERROR][/bold red] Failed to install ruff.")
             console.print(f"[red]{e.stderr.decode()}[/red]")
             sys.exit(1)
     else:
-        console.print(f"[bold green]     Found[/bold green] Linting Module 'ruff'")
+        console.print("[bold green]     Found[/bold green] Linting Module 'ruff'")
 
-    targets_to_lint = []
-    src_dir = project_root / "src"
-    tests_dir = project_root / "tests"
+    lint_cmd = [str(python_executable), "-m", "ruff", "check"] + lint_args
 
-    if src_dir.exists():
-        targets_to_lint.append(src_dir)
-    if tests_dir.exists():
-        targets_to_lint.append(tests_dir)
+    if not lint_args:
+        targets = []
+        src_dir = project_root / "src"
+        tests_dir = project_root / "tests"
+        if src_dir.exists():
+            targets.append(str(src_dir))
+        if tests_dir.exists():
+            targets.append(str(tests_dir))
 
-    if not targets_to_lint:
-        console.print(
-            "[bold yellow][INFO][/bold yellow] No source 'src' or test 'tests' directories found to lint."
-        )
-        sys.exit(0)
+        if not targets:
+            console.print(
+                "[bold yellow][INFO][/bold yellow] No source ('src') or test ('tests') directories found to lint."
+            )
+            sys.exit(0)
 
-    console.print("[bold green]Running[/bold green] linter on codebase\n")
+        lint_cmd.extend(targets)
+
+    console.print("[bold green]     Running[/bold green] linter on codebase...\n")
     time.sleep(0.5)
-
-    lint_cmd = [str(python_executable), "-m", "ruff", "check"] + [
-        str(p) for p in targets_to_lint + lint_args
-    ]
 
     subprocess.run(lint_cmd)
 
-    console.print(f"\n[bold green]Linting[/bold green] process completed.")
+    console.print("\n[bold green]Linting[/bold green] process completed.")

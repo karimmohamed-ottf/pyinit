@@ -51,10 +51,10 @@ def update_dependencies(upgrade: bool = False):
             upgrade_cmd = [str(pip_executable), "install", "--upgrade"] + project_deps
             subprocess.run(upgrade_cmd, check=True)
             console.print(
-                f"\n[bold green]Successfully[/bold green] updated project dependencies."
+                "\n[bold green]Successfully[/bold green] updated project dependencies."
             )
         except subprocess.CalledProcessError as e:
-            console.print(f"[bold red][ERROR][/bold red] Failed to upgrade packages.")
+            console.print("[bold red][ERROR][/bold red] Failed to upgrade packages.")
             console.print(f"[red]{e.stderr.decode()}[/red]")
             sys.exit(1)
 

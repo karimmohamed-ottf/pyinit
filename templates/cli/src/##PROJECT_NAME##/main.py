@@ -3,7 +3,7 @@ from rich.console import Console
 
 def main():
     console = Console()
-    parser = argparse.ArgumentParser(description=f"Description for ##PROJECT_NAME##.")
+    parser = argparse.ArgumentParser(description="Description for ##PROJECT_NAME##.")
     parser.add_argument("--name", default="World", help="The name to greet.")
     args = parser.parse_args()
     

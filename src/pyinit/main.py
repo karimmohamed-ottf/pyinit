@@ -1,6 +1,5 @@
-#!/usr/bin/env python
-# [pyinit] Tool For Creating and Managing Python Projects
 import argparse
+import sys
 
 from .add_module import install_module
 from .build_project import install_project
@@ -25,13 +24,13 @@ from .wrappers import error_handling
 
 @error_handling
 def main():
-
     parser = argparse.ArgumentParser(
-        description=f"Tool For Creating and Managing Python Projects"
+        description="Tool For Creating and Managing Python Projects"
     )
     subparsers = parser.add_subparsers(
         dest="command", required=True, help="Available commands"
     )
+
     parser_new = subparsers.add_parser(
         "new", help="Create a New Python Projcet Structure"
     )
@@ -44,12 +43,8 @@ def main():
         default="app",
         help="The project template to use (default: app)",
     )
-    parser_run = subparsers.add_parser("run", help="Run Your Project's Main File")
-    parser_run.add_argument(
-        "app_args",
-        nargs=argparse.REMAINDER,
-        help="Arguments to pass to the application",
-    )
+
+    subparsers.add_parser("run", help="Run Your Project's Main File")
     parser_add = subparsers.add_parser(
         "add", help="Install a Python Module/Library Into Your Project's venv"
     )
@@ -58,22 +53,15 @@ def main():
         metavar="MOUDLE_NAME",
         help="Name of The Module/Library To Install",
     )
-    parser_build = subparsers.add_parser(
+    subparsers.add_parser(
         "build", help="Build Your Project and install it into the system"
     )
-    parser_init = subparsers.add_parser(
+    subparsers.add_parser(
         "init", help="Initialize a new project in an existing directory"
     )
-    parser_test = subparsers.add_parser("test", help="Run tests with pytest")
-    parser_test.add_argument(
-        "pytest_args", nargs=argparse.REMAINDER, help="Arguments to pass to pytest"
-    )
-    parser_lock = subparsers.add_parser(
-        "lock", help="Generate a requirements.txt file from the venv"
-    )
-    parser_format = subparsers.add_parser(
-        "format", help="Format the codebase with black and isort"
-    )
+    subparsers.add_parser("test", help="Run tests with pytest")
+    subparsers.add_parser("lock", help="Generate a requirements.txt file from the venv")
+    subparsers.add_parser("format", help="Format the codebase with black and isort")
     parser_venv = subparsers.add_parser(
         "venv", help="Manage the project's virtual environment"
     )
@@ -82,16 +70,9 @@ def main():
     )
     venv_subparsers.add_parser("create", help="Create the virtual environment")
     venv_subparsers.add_parser("remove", help="Remove the virtual environment")
-    parser_lint = subparsers.add_parser("lint", help="Lint the codebase with ruff")
-    parser_lint.add_argument(
-        "lint_args", nargs=argparse.REMAINDER, help="Arguments to pass to ruff"
-    )
-    parser_graph = subparsers.add_parser(
-        "graph", help="Display the project's dependency graph"
-    )
-    parser_clean = subparsers.add_parser(
-        "clean", help="Remove temporary and build-related files"
-    )
+    subparsers.add_parser("lint", help="Lint the codebase with ruff")
+    subparsers.add_parser("graph", help="Display the project's dependency graph")
+    subparsers.add_parser("clean", help="Remove temporary and build-related files")
     parser_bump = subparsers.add_parser(
         "bump", help="Increment the project version (major, minor, patch)"
     )
@@ -106,12 +87,10 @@ def main():
     parser_update.add_argument(
         "--upgrade", action="store_true", help="Upgrade outdated packages"
     )
-    parser_scan = subparsers.add_parser(
+    subparsers.add_parser(
         "scan", help="Scan the project for configuration and structure issues"
     )
-    parser_dockerize = subparsers.add_parser(
-        "dockerize", help="Generate a Dockerfile for the project"
-    )
+    subparsers.add_parser("dockerize", help="Generate a Dockerfile for the project")
     parser_env = subparsers.add_parser(
         "env", help="Manage project environment variables (.env file)"
     )
@@ -124,51 +103,57 @@ def main():
     parser_env_set.add_argument(
         "vars", nargs="+", metavar="KEY=VALUE", help="Variable(s) to set"
     )
-    parser_hooks = subparsers.add_parser(
-        "add-hooks", help="Set up pre-commit hooks for the project"
-    )
-    args = parser.parse_args()
+    subparsers.add_parser("add-hooks", help="Set up pre-commit hooks for the project")
 
-    match args.command:
+    passthrough_commands = ["run", "test", "lint"]
+    main_args = sys.argv[1:]
+    sub_args = []
 
-        case "new":
-            project_name = args.project_name
-            create_project(project_name, args.template)
-        case "run":
-            start_project(args.app_args)
-        case "add":
-            module = args.module_name
-            install_module(module)
-        case "build":
-            install_project()
-        case "init":
-            initialize_project()
-        case "test":
-            run_tests(args.pytest_args)
-        case "lock":
-            lock_dependencies()
-        case "format":
-            format_project()
-        case "venv":
-            manage_venv(args.venv_command)
-        case "lint":
-            lint_project(args.lint_args)
-        case "graph":
-            show_dependency_graph()
-        case "clean":
-            clean_project()
-        case "bump":
-            bump_project_version(args.part)
-        case "update":
-            update_dependencies(args.upgrade)
-        case "scan":
-            scan_project()
-        case "dockerize":
-            dockerize_project()
-        case "env":
+    for i, arg in enumerate(main_args):
+        if arg in passthrough_commands:
+            sub_args = main_args[i + 1 :]
+            main_args = main_args[: i + 1]
+            break
+
+    args = parser.parse_args(main_args)
+
+    if args.command == "new":
+        create_project(args.project_name, args.template)
+    elif args.command == "run":
+        start_project(sub_args)
+    elif args.command == "add":
+        install_module(args.module_name)
+    elif args.command == "build":
+        install_project()
+    elif args.command == "init":
+        initialize_project()
+    elif args.command == "test":
+        run_tests(sub_args)
+    elif args.command == "lock":
+        lock_dependencies()
+    elif args.command == "format":
+        format_project()
+    elif args.command == "venv":
+        manage_venv(args.venv_command)
+    elif args.command == "lint":
+        lint_project(sub_args)
+    elif args.command == "graph":
+        show_dependency_graph()
+    elif args.command == "clean":
+        clean_project()
+    elif args.command == "bump":
+        bump_project_version(args.part)
+    elif args.command == "update":
+        update_dependencies(args.upgrade)
+    elif args.command == "scan":
+        scan_project()
+    elif args.command == "dockerize":
+        dockerize_project()
+    elif args.command == "env":
+        if args.env_command == "set":
             manage_env(args.vars)
-        case "add-hooks":
-            add_git_hooks()
+    elif args.command == "add-hooks":
+        add_git_hooks()
 
 
 if __name__ == "__main__":

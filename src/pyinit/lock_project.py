@@ -51,7 +51,7 @@ def lock_dependencies():
         )
 
     except subprocess.CalledProcessError as e:
-        console.print(f"[bold red][ERROR][/bold red] Failed to run 'pip freeze'.")
+        console.print("[bold red][ERROR][/bold red] Failed to run 'pip freeze'.")
         console.print(f"[red]{e.stderr}[/red]")
         sys.exit(1)
     except Exception as e:

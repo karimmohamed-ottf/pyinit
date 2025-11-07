@@ -1,11 +1,10 @@
-import os
 import subprocess
 import sys
 import time
 
 from rich.console import Console
 
-from .utils import find_project_root
+from .utils import find_project_root, get_project_name
 from .wrappers import error_handling
 
 console = Console()
@@ -14,26 +13,28 @@ console = Console()
 @error_handling
 def start_project(app_args: list = None):
     project_root = find_project_root()
+    if not app_args:
+        app_args = []
 
     if not project_root:
         console.print(
-            f"[bold red][ERROR][/bold red] Not inside a project. Could not find 'pyproject.toml'."
+            "[bold red][ERROR][/bold red] Not inside a project. Could not find 'pyproject.toml'."
         )
         sys.exit(1)
 
-    project_name = project_root.name
+    project_name = get_project_name(project_root) or project_root.name
     main_file = project_root / "src" / project_name / "main.py"
     venv_dir = project_root / "venv"
 
     if not main_file.exists():
         console.print(
-            f"[bold red][ERROR][/bold red] main file '{main_file}' was not found."
+            f"[bold red][ERROR][/bold red] Main file '{main_file}' was not found."
         )
         sys.exit(1)
 
     if not venv_dir.exists():
         console.print(
-            f"[bold red][ERROR][/bold red] Virtual Environment '{venv_dir.name}' not found\n-> Did You Create The Project Correctly?"
+            f"[bold red][ERROR][/bold red] Virtual Environment '{venv_dir.name}' not found."
         )
         sys.exit(1)
 

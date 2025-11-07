@@ -35,7 +35,7 @@ def bump_project_version(part: str):
         )
         sys.exit(1)
 
-    console.print(f"[bold green]    Bumping[/bold green] project version")
+    console.print("[bold green]    Bumping[/bold green] project version")
     time.sleep(0.25)
 
     try:
@@ -72,4 +72,4 @@ def bump_project_version(part: str):
     console.print(
         f"[bold green]     Updating[/bold green] version from [yellow]{old_version}[/yellow] to [cyan]{new_version}[/cyan]"
     )
-    console.print(f"\n[bold green]Successfully[/bold green] bumped project version.")
+    console.print("\n[bold green]Successfully[/bold green] bumped project version.")

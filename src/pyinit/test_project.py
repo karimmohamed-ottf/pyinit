@@ -9,9 +9,11 @@ from .wrappers import error_handling
 
 
 @error_handling
-def run_tests(pytest_args: list):
+def run_tests(pytest_args: list = None):
     console = Console()
     project_root = find_project_root()
+    if not pytest_args:
+        pytest_args = []
 
     if not project_root:
         console.print(
@@ -27,7 +29,9 @@ def run_tests(pytest_args: list):
         sys.exit(1)
 
     tests_dir = project_root / "tests"
-    if not tests_dir.exists():
+    if not tests_dir.exists() and not any(
+        arg for arg in pytest_args if not arg.startswith("-")
+    ):
         console.print(
             "[bold yellow][INFO][/bold yellow] No 'tests' directory found. Nothing to test."
         )
@@ -40,8 +44,8 @@ def run_tests(pytest_args: list):
         python_executable = venv_dir / "bin" / "python"
         pip_executable = venv_dir / "bin" / "pip"
 
-    console.print(f"[bold green]    Starting[/bold green] to test project")
-    time.sleep(0.5)
+    console.print("[bold green]    Checking[/bold green] for 'pytest'")
+    time.sleep(0.25)
 
     check_pytest_cmd = [str(python_executable), "-c", "import pytest"]
     pytest_installed = (
@@ -50,27 +54,28 @@ def run_tests(pytest_args: list):
 
     if not pytest_installed:
         console.print(
-            f"[bold green]     Installing[/bold green] 'pytest' into current venv"
+            "[bold green]     Installing[/bold green] 'pytest' into current venv"
         )
-        time.sleep(0.5)
+        time.sleep(0.25)
         install_pytest_cmd = [str(pip_executable), "install", "pytest"]
         try:
             subprocess.run(install_pytest_cmd, check=True, capture_output=True)
-            console.print(
-                "[bold green]    Successfully[/bold green] installed 'pytest'."
-            )
+            console.print("[bold green]Successfully[/bold green] installed 'pytest'.")
         except subprocess.CalledProcessError as e:
-            console.print(f"[bold red][ERROR][/bold red] Failed to install pytest.")
+            console.print("[bold red][ERROR][/bold red] Failed to install pytest.")
             console.print(f"[red]{e.stderr.decode()}[/red]")
             sys.exit(1)
+    else:
+        console.print("[bold green]     Found[/bold green] 'pytest'")
 
-    console.print(f"[bold green]Running[/bold green] tests\n")
+    console.print("[bold green]     Running[/bold green] tests...\n")
     time.sleep(0.5)
 
     run_tests_cmd = [str(python_executable), "-m", "pytest"] + pytest_args
 
     try:
         subprocess.run(run_tests_cmd, cwd=project_root)
+        console.print(f"\n[bold green]Testing[/bold green] process completed.")
     except Exception as e:
         console.print(
             f"[bold red][ERROR][/bold red] An unexpected error occurred while running tests: {e}"

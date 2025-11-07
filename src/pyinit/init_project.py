@@ -25,7 +25,7 @@ def initialize_project():
     console = Console()
     project_root = Path.cwd()
 
-    console.print(f"[bold green]    Initializing[/bold green] existing project")
+    console.print("[bold green]    Initializing[/bold green] existing project")
     time.sleep(0.5)
 
     original_name = project_root.name
@@ -59,12 +59,12 @@ def initialize_project():
         )
         sys.exit(1)
 
-    console.print(f"[bold green]      Creating[/bold green] Project Structure")
+    console.print("[bold green]      Creating[/bold green] Project Structure")
     time.sleep(0.5)
     source_dir = project_root / "src" / project_name
     os.makedirs(source_dir)
 
-    console.print(f"[bold green]      Locating[/bold green] '.py' files to migrate")
+    console.print("[bold green]      Locating[/bold green] '.py' files to migrate")
     time.sleep(0.5)
     python_files_to_move = [
         f for f in project_root.iterdir() if f.is_file() and f.suffix == ".py"
@@ -84,7 +84,7 @@ def initialize_project():
         with open(source_dir / "main.py", "w") as file:
             file.write('print("Hello World!")\n')
 
-    console.print(f"[bold green]       Creating[/bold green] configuration files")
+    console.print("[bold green]       Creating[/bold green] configuration files")
     time.sleep(0.5)
 
     gitignore_content = """# Virtual Environment
@@ -124,7 +124,7 @@ build/
         )
         sys.exit(1)
 
-    console.print(f"[bold green]    Finalizing[/bold green] setup")
+    console.print("[bold green]    Finalizing[/bold green] setup")
     time.sleep(0.5)
     if not (project_root / ".git").exists():
         subprocess.run(

@@ -29,7 +29,7 @@ def manage_venv(action: str):
 
 
 def create_virtual_env(console: Console, venv_dir):
-    console.print(f"[bold green]     Creating[/bold green] virtual environment")
+    console.print("[bold green]     Creating[/bold green] virtual environment")
     time.sleep(0.25)
 
     if venv_dir.exists():
@@ -52,7 +52,7 @@ def create_virtual_env(console: Console, venv_dir):
 
 
 def remove_virtual_env(console: Console, venv_dir):
-    console.print(f"[bold yellow]     Removing[/bold yellow] virtual environment")
+    console.print("[bold yellow]     Removing[/bold yellow] virtual environment")
     time.sleep(0.25)
 
     if not venv_dir.exists() or not venv_dir.is_dir():

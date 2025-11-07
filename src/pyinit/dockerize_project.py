@@ -46,7 +46,7 @@ def dockerize_project():
             sys.exit(0)
 
     console.print(
-        f"[bold green]    Generating[/bold green] Docker configuration files..."
+        "[bold green]    Generating[/bold green] Docker configuration files..."
     )
     time.sleep(1)
 
@@ -143,7 +143,7 @@ build/
 
         with open(dockerignore_path, "w") as f:
             f.write(dockerignore_content.strip())
-        console.print(f"[bold green]     Created[/bold green] '.dockerignore'")
+        console.print("[bold green]     Created[/bold green] '.dockerignore'")
         time.sleep(1)
 
         console.print("\n[bold green]Successfully[/bold green] generated Docker files.")

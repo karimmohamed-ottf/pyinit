@@ -1,4 +1,3 @@
-import os
 import subprocess
 import sys
 import time
@@ -16,7 +15,7 @@ def install_project():
 
     if not project_root:
         console.print(
-            f"[bold red][ERROR][/bold red] Not inside a project. Could not find 'pyproject.toml'."
+            "[bold red][ERROR][/bold red] Not inside a project. Could not find 'pyproject.toml'."
         )
         sys.exit(1)
 
@@ -25,7 +24,7 @@ def install_project():
     project_name = get_project_name(project_root)
     if not project_name:
         console.print(
-            f"[dim yellow]\n[WARNING][/dim yellow] Could not determine project name from 'pyproject.toml'\n"
+            "[dim yellow]\n[WARNING][/dim yellow] Could not determine project name from 'pyproject.toml'\n"
         )
 
     if sys.platform == "win32":
@@ -36,7 +35,7 @@ def install_project():
         pip_executable = venv_dir / "bin" / "pip"
 
     try:
-        console.print(f"[bold green]    Fetching[/bold green] Required Build Modules")
+        console.print("[bold green]    Fetching[/bold green] Required Build Modules")
         time.sleep(0.25)
         subprocess.run(
             [str(pip_executable), "install", "build", "wheel"],
@@ -58,7 +57,7 @@ def install_project():
         console.print(
             f"[bold green]\nSuccessfully[/bold green] built package '{project_name}'"
         )
-        console.print(f"[bold green]->[/] Check 'dist/' for results")
+        console.print("[bold green]->[/] Check 'dist/' for results")
 
     except subprocess.CalledProcessError as e:
         console.print(f"[bold red][ERROR][/bold red] {e}")
