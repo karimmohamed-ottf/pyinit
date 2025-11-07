@@ -46,7 +46,7 @@ def bump_project_version(part: str):
             f"[bold red][ERROR][/bold red] Invalid or missing version string in '{pyproject_path.name}'. Expected format: 'X.Y.Z'"
         )
         sys.exit(1)
-    
+
     else:
 
         if part == "major":

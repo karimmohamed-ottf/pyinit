@@ -24,7 +24,6 @@ from .test_project import run_tests
 from .update_project import update_dependencies
 from .venv_manager import manage_venv
 
-
 __all__ = [
     "create_project",
     "initialize_project",

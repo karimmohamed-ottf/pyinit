@@ -1,4 +1,3 @@
-import os
 import re
 import shutil
 import subprocess
@@ -9,7 +8,7 @@ from pathlib import Path
 
 from rich.console import Console
 
-from .new_project import get_git_config, copy_and_process_template, TEMPLATES_BASE_DIR
+from .new_project import TEMPLATES_BASE_DIR, copy_and_process_template, get_git_config
 from .wrappers import error_handling
 
 
@@ -27,30 +26,46 @@ def initialize_project():
     template_name = "app"
     template_dir = TEMPLATES_BASE_DIR / template_name
 
-    console.print(f"[bold green]    Initializing[/bold green] project in '{project_root.name}' using '{template_name}' template")
+    console.print(
+        f"[bold green]    Initializing[/bold green] project in '{project_root.name}' using '{template_name}' template"
+    )
     time.sleep(0.5)
 
     if not template_dir.is_dir():
-        console.print(f"[bold red][ERROR][/bold red] Default template '{template_name}' not found at '{TEMPLATES_BASE_DIR}'.")
+        console.print(
+            f"[bold red][ERROR][/bold red] Default template '{template_name}' not found at '{TEMPLATES_BASE_DIR}'."
+        )
         sys.exit(1)
 
     original_name = project_root.name
     project_name = sanitize_name(original_name)
     if not project_name:
-        console.print(f"[bold red][ERROR][/bold red] Could not derive a valid project name from '{original_name}'")
+        console.print(
+            f"[bold red][ERROR][/bold red] Could not derive a valid project name from '{original_name}'"
+        )
         sys.exit(1)
 
-    console.print(f"[bold green]     Setting[/bold green] Project Name to: '{project_name}'")
+    console.print(
+        f"[bold green]     Setting[/bold green] Project Name to: '{project_name}'"
+    )
     time.sleep(0.5)
 
-    if (project_root / "pyproject.toml").exists() or (project_root / "src").exists() or (project_root / "venv").exists():
-        console.print("[bold red][ERROR][/bold red] Project already seems to be initialized ('pyproject.toml', 'src', or 'venv' exists).")
+    if (
+        (project_root / "pyproject.toml").exists()
+        or (project_root / "src").exists()
+        or (project_root / "venv").exists()
+    ):
+        console.print(
+            "[bold red][ERROR][/bold red] Project already seems to be initialized ('pyproject.toml', 'src', or 'venv' exists)."
+        )
         sys.exit(1)
 
     console.print("[bold green]      Locating[/bold green] '.py' files to migrate...")
     time.sleep(0.5)
-    python_files_to_move = [f for f in project_root.iterdir() if f.is_file() and f.suffix == ".py"]
-    
+    python_files_to_move = [
+        f for f in project_root.iterdir() if f.is_file() and f.suffix == ".py"
+    ]
+
     temp_migration_dir = project_root / "__pyinit_migration_temp__"
     if python_files_to_move:
         temp_migration_dir.mkdir()
@@ -58,9 +73,11 @@ def initialize_project():
             shutil.move(py_file, temp_migration_dir / py_file.name)
 
     try:
-        console.print("[bold green]      Creating[/bold green] project structure from template...")
+        console.print(
+            "[bold green]      Creating[/bold green] project structure from template..."
+        )
         time.sleep(0.5)
-        
+
         author_name = get_git_config("user.name") or "Your Name"
         author_email = get_git_config("user.email") or "you@example.com"
 
@@ -73,7 +90,9 @@ def initialize_project():
         copy_and_process_template(template_dir, project_root, replacements)
 
         if python_files_to_move:
-            console.print("[bold green]   Migrating[/bold green] existing Python files...")
+            console.print(
+                "[bold green]   Migrating[/bold green] existing Python files..."
+            )
             time.sleep(0.5)
             source_package_dir = project_root / "src" / project_name
             (source_package_dir / "main.py").unlink(missing_ok=True)
@@ -83,9 +102,11 @@ def initialize_project():
 
         console.print("[bold green]    Finalizing[/bold green] setup...")
         time.sleep(0.5)
-        
+
         if not (project_root / ".git").exists():
-            subprocess.run(["git", "init"], cwd=project_root, check=True, capture_output=True)
+            subprocess.run(
+                ["git", "init"], cwd=project_root, check=True, capture_output=True
+            )
 
         venv.create(project_root / "venv", with_pip=True)
 
@@ -107,7 +128,9 @@ build/
         with open(gitignore_path, "a") as f:
             f.write(gitignore_content)
 
-        console.print(f"[bold green]\nSuccessfully[/bold green] initialized project '{project_name}'")
+        console.print(
+            f"[bold green]\nSuccessfully[/bold green] initialized project '{project_name}'"
+        )
 
     except Exception as e:
         console.print(f"[bold red][ERROR][/bold red] Failed during initialization: {e}")
