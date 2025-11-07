@@ -83,6 +83,9 @@ def main():
     venv_subparsers.add_parser("create", help="Create the virtual environment")
     venv_subparsers.add_parser("remove", help="Remove the virtual environment")
     parser_lint = subparsers.add_parser("lint", help="Lint the codebase with ruff")
+    parser_lint.add_argument(
+        "lint_args", nargs=argparse.REMAINDER, help="Arguments to pass to ruff"
+    )
     parser_graph = subparsers.add_parser(
         "graph", help="Display the project's dependency graph"
     )
@@ -149,7 +152,7 @@ def main():
         case "venv":
             manage_venv(args.venv_command)
         case "lint":
-            lint_project()
+            lint_project(args.lint_args)
         case "graph":
             show_dependency_graph()
         case "clean":

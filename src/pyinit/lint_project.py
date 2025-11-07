@@ -9,7 +9,7 @@ from .wrappers import error_handling
 
 
 @error_handling
-def lint_project():
+def lint_project(lint_args: list):
     console = Console()
     project_root = find_project_root()
 
@@ -75,7 +75,7 @@ def lint_project():
     time.sleep(0.5)
 
     lint_cmd = [str(python_executable), "-m", "ruff", "check"] + [
-        str(p) for p in targets_to_lint
+        str(p) for p in targets_to_lint + lint_args
     ]
 
     subprocess.run(lint_cmd)
