@@ -17,7 +17,7 @@ import sys
 # Import handler functions for each command from their respective modules.
 from .add import add_module
 from .build import build_project
-from .check import lint_project
+from .check import check_project
 from .clean import clean_project
 from .docker import gen_docker_files
 from .env import manage_env

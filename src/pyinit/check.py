@@ -23,7 +23,7 @@ from .wrappers import error_handling
 
 
 @error_handling
-def lint_project(lint_args: list = None):
+def check_project(lint_args: list = None):
     """
     Checks the project's codebase using the ruff linter.
 
@@ -77,7 +77,7 @@ def lint_project(lint_args: list = None):
 
     if not linter_installed:
         console.print(
-            "[bold green]     Installing[/bold green] Required Linting Module 'ruff'"
+            "[bold green]     Installing[/bold green] Required Checking Module 'ruff'"
         )
         install_cmd = [str(pip_executable), "install", "ruff"]
         try:
@@ -115,10 +115,10 @@ def lint_project(lint_args: list = None):
 
         lint_cmd.extend(targets)
 
-    console.print("[bold green]\nRunning[/bold green] linter on codebase\n")
+    console.print("[bold green]\nRunning[/bold green] Checks on codebase\n")
     time.sleep(0.5)
 
     # Run the linter. Output is streamed directly to the console.
     subprocess.run(lint_cmd)
 
-    console.print("\n[bold green]Linting[/bold green] process completed.")
+    console.print("\n[bold green]Checking[/bold green] process completed.")
