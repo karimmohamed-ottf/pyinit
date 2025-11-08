@@ -1,3 +1,12 @@
+# Copyright (c) 2025 mrbooo895.
+#
+# This software is released under the MIT License.
+# https://opensource.org/licenses/MIT
+
+"""
+Small Function for handling Ctrl+C/Ctrl+D Intterupts
+"""
+
 import sys
 
 from rich.console import Console
