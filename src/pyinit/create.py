@@ -72,7 +72,9 @@ def create_project(project_path: str):
 
     # --- Pre-flight Checks ---
     if project_root.exists():
-        console.print(f"[bold red][ERROR][/bold red] Folder '{project_path}' already exists.")
+        console.print(
+            f"[bold red][ERROR][/bold red] Folder '{project_path}' already exists."
+        )
         sys.exit(1)
 
     try:
@@ -86,12 +88,11 @@ def create_project(project_path: str):
         (tests_dir / "__init__.py").touch()
         (project_root / "README.md").write_text(f"# {project_name}\n")
 
-
         # --- Generate pyproject.toml ---
         # Access the template file packaged with the tool itself.
         template_ref = resources_files("pyinit._templates").joinpath("pyproject.toml")
         template_content = template_ref.read_text(encoding="utf-8")
-        
+
         author_name = get_git_config("user.name") or "Your Name"
         author_email = get_git_config("user.email") or "you@example.com"
 
@@ -129,8 +130,10 @@ build/
 .coverage
 """
         (project_root / ".gitignore").write_text(gitignore_content.strip())
-        
-        console.print(f"[bold green]Successfully[/bold green] created project '{project_name}'.")
+
+        console.print(
+            f"[bold green]Successfully[/bold green] created project '{project_name}'."
+        )
 
     except Exception as e:
         # --- Rollback on Failure ---

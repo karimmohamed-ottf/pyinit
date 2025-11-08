@@ -65,22 +65,33 @@ def initialize_project():
     console = Console()
     project_root = Path.cwd()
 
-    console.print(f"[bold green]    Initializing[/bold green] project in '{project_root.name}'")
+    console.print(
+        f"[bold green]    Initializing[/bold green] project in '{project_root.name}'"
+    )
 
     # --- Pre-flight Checks ---
     original_name = project_root.name
     project_name = sanitize_name(original_name)
     if not project_name:
-        console.print(f"[bold red][ERROR][/bold red] Could not derive a valid project name from '{original_name}'")
+        console.print(
+            f"[bold red][ERROR][/bold red] Could not derive a valid project name from '{original_name}'"
+        )
         sys.exit(1)
 
-
-    if (project_root / "pyproject.toml").exists() or (project_root / "src").exists() or (project_root / "venv").exists():
-        console.print("[bold red][ERROR][/bold red] Project already seems to be initialized ('pyproject.toml', 'src', or 'venv' exists).")
+    if (
+        (project_root / "pyproject.toml").exists()
+        or (project_root / "src").exists()
+        or (project_root / "venv").exists()
+    ):
+        console.print(
+            "[bold red][ERROR][/bold red] Project already seems to be initialized ('pyproject.toml', 'src', or 'venv' exists)."
+        )
         sys.exit(1)
 
     # --- Safe File Migration (Phase 1) ---
-    python_files_to_move = [f for f in project_root.iterdir() if f.is_file() and f.suffix == ".py"]
+    python_files_to_move = [
+        f for f in project_root.iterdir() if f.is_file() and f.suffix == ".py"
+    ]
     has_main_py = any(f.name == "main.py" for f in python_files_to_move)
 
     temp_migration_dir = project_root / "__pyinit_migration_temp__"
@@ -104,15 +115,17 @@ def initialize_project():
             for py_file in temp_migration_dir.iterdir():
                 shutil.move(py_file, source_dir / py_file.name)
             temp_migration_dir.rmdir()
-        
+
         # Create a default main.py only if one was not migrated.
         if not has_main_py:
-            (source_dir / "main.py").write_text(f'print("Hello from {project_name}!")\n')
+            (source_dir / "main.py").write_text(
+                f'print("Hello from {project_name}!")\n'
+            )
 
         # --- Generate pyproject.toml ---
         template_ref = resources_files("pyinit._templates").joinpath("pyproject.toml")
         template_content = template_ref.read_text(encoding="utf-8")
-        
+
         author_name = get_git_config("user.name") or "Your Name"
         author_email = get_git_config("user.email") or "you@example.com"
 
@@ -124,7 +137,9 @@ def initialize_project():
 
         # --- Finalization ---
         if not (project_root / ".git").exists():
-            subprocess.run(["git", "init"], cwd=project_root, check=True, capture_output=True)
+            subprocess.run(
+                ["git", "init"], cwd=project_root, check=True, capture_output=True
+            )
 
         venv.create(project_root / "venv", with_pip=True)
 
@@ -149,7 +164,9 @@ build/
 """
         (project_root / ".gitignore").write_text(gitignore_content.strip())
 
-        console.print(f"[bold green]Successfully[/bold green] initialized project '{project_name}'")
+        console.print(
+            f"[bold green]Successfully[/bold green] initialized project '{project_name}'"
+        )
 
     except Exception as e:
         # --- Rollback on Failure ---
