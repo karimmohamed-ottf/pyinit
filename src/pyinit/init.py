@@ -19,16 +19,9 @@ import sys
 import venv
 from pathlib import Path
 
-# Use importlib.resources to access package data in a cross-platform way.
-try:
-    from importlib.resources import files as resources_files
-except ImportError:
-    # Fallback for Python < 3.9
-    from importlib_resources import files as resources_files
-
 from rich.console import Console
 
-from .create import get_git_config  # Re-use from create.py
+from .create import get_git_config, TEMPLATE_PATH
 from .wrappers import error_handling
 
 
@@ -55,7 +48,7 @@ def initialize_project():
     1. Derives and sanitizes a project name from the current directory name.
     2. Performs safety checks to prevent overwriting an existing project.
     3. Manually creates the standard project structure (`src/`, `tests/`, etc.).
-    4. Generates `pyproject.toml` from a built-in template.
+    4. Generates `pyproject.toml` from a system-wide template.
     5. Migrates any existing `.py` files from the root into the new source directory.
     6. Initializes a Git repository and a virtual environment.
 
@@ -123,8 +116,12 @@ def initialize_project():
             )
 
         # --- Generate pyproject.toml ---
-        template_ref = resources_files("pyinit._templates").joinpath("pyproject.toml")
-        template_content = template_ref.read_text(encoding="utf-8")
+        try:
+            template_content = TEMPLATE_PATH.read_text(encoding="utf-8")
+        except FileNotFoundError:
+            console.print(f"[bold red][ERROR][/bold red] Template file not found at '{TEMPLATE_PATH}'.")
+            console.print("[dim]       - Ensure pyinit is installed correctly.[/dim]")
+            sys.exit(1)
 
         author_name = get_git_config("user.name") or "Your Name"
         author_email = get_git_config("user.email") or "you@example.com"
@@ -165,7 +162,7 @@ build/
         (project_root / ".gitignore").write_text(gitignore_content.strip())
 
         console.print(
-            f"[bold green]Successfully[/bold green] initialized project '{project_name}'"
+            f"\n[bold green]Successfully[/bold green] initialized project '{project_name}'"
         )
 
     except Exception as e:

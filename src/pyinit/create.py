@@ -8,7 +8,8 @@ Implements the 'create' command for the pyinit command-line tool.
 
 This module is the core of project scaffolding. It creates a new, standardized,
 and fully structured Python project. It handles directory creation, configuration
-file generation, virtual environment setup, and Git repository initialization.
+file generation from a system-wide template, virtual environment setup, and Git
+repository initialization.
 """
 
 import shutil
@@ -17,17 +18,13 @@ import sys
 import venv
 from pathlib import Path
 
-# Use importlib.resources to access package data in a cross-platform way.
-# This avoids hardcoded paths like /usr/share.
-try:
-    from importlib.resources import files as resources_files
-except ImportError:
-    # Fallback for Python < 3.9
-    from importlib_resources import files as resources_files
-
 from rich.console import Console
 
 from .wrappers import error_handling
+
+# Define the absolute, hardcoded path to the template file.
+# This file must be placed here during installation.
+TEMPLATE_PATH = Path("/usr/share/pyinit/pyproject.toml")
 
 
 def get_git_config(key: str) -> str | None:
@@ -56,7 +53,7 @@ def create_project(project_path: str):
 
     This is the main entry point for the 'pyinit create' command. It orchestrates
     the entire project creation process, including directory creation, generation
-    of configuration files from an internal template, and initialization of
+    of configuration files from a system-wide template, and initialization of
     Git and a virtual environment.
 
     :param str project_path: The path/name for the new project directory.
@@ -89,9 +86,12 @@ def create_project(project_path: str):
         (project_root / "README.md").write_text(f"# {project_name}\n")
 
         # --- Generate pyproject.toml ---
-        # Access the template file packaged with the tool itself.
-        template_ref = resources_files("pyinit._templates").joinpath("pyproject.toml")
-        template_content = template_ref.read_text(encoding="utf-8")
+        try:
+            template_content = TEMPLATE_PATH.read_text(encoding="utf-8")
+        except FileNotFoundError:
+            console.print(f"[bold red][ERROR][/bold red] Template file not found at '{TEMPLATE_PATH}'.")
+            console.print("[dim]       - Ensure pyinit is installed correctly.[/dim]")
+            sys.exit(1)
 
         author_name = get_git_config("user.name") or "Your Name"
         author_email = get_git_config("user.email") or "you@example.com"
