@@ -178,8 +178,8 @@ def project_info():
     console.print(f"  License        : {license_text or '[dim]N/A[/dim]'}")
 
     console.print(f"  Project Path   : {project_root}")
-    console.print(f"  Created On     : {creation_time}")
-    console.print(f"  Last Modified  : {last_mod} (in src)")
+    console.print(f"  Created On     : [dim white]{creation_time}[/]")
+    console.print(f"  Last Modified  : [dim white]{last_mod}[/] (in src)")
     console.print(
         f"  Python Req.    : {project_data.get('requires-python', '[dim]N/A[/dim]')}"
     )
