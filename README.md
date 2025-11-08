@@ -66,12 +66,6 @@
 
 ## 📥 Installation
 
-### Install via pip
-
-```bash
-pip install pyinit
-```
-
 ### Install from source
 
 ```bash
@@ -393,7 +387,7 @@ of this software and associated documentation files...
 
 - 🐛 **Issues**: [GitHub Issues](https://github.com/mrbooo895/pyinit/issues)
 - 💬 **Discussions**: [GitHub Discussions](https://github.com/mrbooo895/pyinit/discussions)
-- 📧 **Email**: you@example.com
+- 📧 **Email**: kwkkna3@gmail.com
 
 ---
 
