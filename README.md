@@ -84,9 +84,8 @@ pyinit --help
 | Command | Description | Example |
 |---------|-------------|---------|
 | `test` | Run your test suite using pytest | `pyinit test -v -k "login"` |
-| `lint` | Analyze code for errors and style issues with ruff | `pyinit lint` |
+| `check` | Analyze code for errors and style issues with ruff | `pyinit lint` |
 | `format` | Auto-format code with black and isort | `pyinit format` |
-| `add-hooks` | Set up pre-commit hooks for automated quality checks | `pyinit add-hooks` |
 
 ### 🐍 Environment Management
 
@@ -99,8 +98,8 @@ pyinit --help
 
 | Command | Description | Example |
 |---------|-------------|---------|
-| `dockerize` | Generate production-ready Dockerfile and .dockerignore | `pyinit dockerize` |
-| `bump` | Increment project version (semantic versioning) | `pyinit bump patch` |
+| `docker` | Generate production-ready Dockerfile and .dockerignore | `pyinit dockerize` |
+| `release` | Increment project version (semantic versioning) | `pyinit bump patch` |
 | `clean` | Remove temporary files and build artifacts | `pyinit clean` |
 | `scan` | Diagnose project structure and configuration issues | `pyinit scan` |
 
@@ -139,9 +138,9 @@ pyinit add "python-dotenv"
 pyinit env set DATABASE_URL=sqlite:///app.db
 pyinit env set SECRET_KEY=your-secret-key
 
-# Format and lint your code
+# Format and check your code
 pyinit format
-pyinit lint
+pyinit check
 
 # Run tests
 pyinit test
@@ -152,14 +151,11 @@ pyinit lock
 # Scan for issues
 pyinit scan
 
-# Set up pre-commit hooks
-pyinit add-hooks
-
 # Generate Docker configuration
-pyinit dockerize
+pyinit docker
 
-# Bump version before release
-pyinit bump minor
+# release new version
+pyinit release minor
 
 # Build and install
 pyinit build
