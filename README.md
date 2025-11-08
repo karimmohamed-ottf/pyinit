@@ -34,7 +34,6 @@
 
 ### 📦 **Dependency Management**
 - ✅ Add & update packages effortlessly
-- ✅ Lock dependencies to `requirements.txt`
 - ✅ Visualize dependency graphs
 - ✅ Auto-sync dependencies
 
@@ -55,9 +54,6 @@
 ### 🚢 **Build & Deployment**
 - ✅ Build wheels & source distributions
 - ✅ Semantic version management
-- ✅ Docker configuration generation
-- ✅ Environment variable management
-
 </td>
 </tr>
 </table>
@@ -88,16 +84,16 @@ pip install -e .
 
 ```bash
 # Create a simple application
-pyinit new my_project
+pyinit create my_project
 
 # Create a library
-pyinit new my_library --template library
+pyinit create my_library --template library
 
 # Create a Flask web app
-pyinit new my_webapp --template flask
+pyinit create my_webapp --template flask
 
 # Create a CLI tool
-pyinit new my_cli --template cli
+pyinit create my_cli --template cli
 ```
 
 ### Initialize an Existing Directory
@@ -116,8 +112,17 @@ pyinit run
 ### Add Dependencies
 
 ```bash
-pyinit add requests
-pyinit add flask numpy pandas
+pyinit install requests
+pyinit install flask numpy pandas
+```
+
+---
+
+### Remove Modules
+
+```bash
+pyinit uninstall requests
+pyinit uninstall flask numpy pandas
 ```
 
 ---
@@ -128,8 +133,8 @@ pyinit add flask numpy pandas
 
 | Command | Description |
 |---------|-------------|
-| `pyinit new <name>` | Create a new Python project |
-| `pyinit new <name> -t <template>` | Create project with specific template (app, library, flask, cli) |
+| `pyinit create <name>` | Create a new Python project |
+| `pyinit create <name> -t <template>` | Create project with specific template (app, library, flask, cli) |
 | `pyinit init` | Initialize PyInit structure in existing directory |
 | `pyinit info` | Display comprehensive project information |
 
@@ -144,10 +149,10 @@ pyinit add flask numpy pandas
 
 | Command | Description |
 |---------|-------------|
-| `pyinit add <package>` | Install a package to your project |
-| `pyinit update` | Check for outdated packages |
+| `pyinit install <package>` | Install a package to your project |
+| `pyinit uninstall <package>` | uninstall a package from your project |
+| `pyinit update` | Check for outdated modules |
 | `pyinit update --upgrade` | Upgrade project dependencies |
-| `pyinit lock` | Generate requirements.txt from venv |
 | `pyinit graph` | Display dependency tree |
 
 ### 🔧 Code Quality
@@ -173,7 +178,6 @@ pyinit add flask numpy pandas
 | `pyinit venv create` | Create virtual environment |
 | `pyinit venv remove` | Remove virtual environment |
 | `pyinit env set KEY=VALUE` | Set environment variables |
-| `pyinit docker` | Generate Dockerfile & .dockerignore |
 
 ---
 
@@ -183,13 +187,13 @@ pyinit add flask numpy pandas
 
 ```bash
 # 1. Create a new project
-pyinit new awesome_project
+pyinit create awesome_project
 
 # 2. Navigate to the project
 cd awesome_project
 
 # 3. Add dependencies
-pyinit add requests beautifulsoup4 pandas
+pyinit install requests beautifulsoup4 pandas
 
 # 4. Write your code in src/awesome_project/
 
@@ -205,13 +209,10 @@ pyinit test
 pyinit format
 pyinit check
 
-# 9. Lock dependencies
-pyinit lock
-
-# 10. Build the package
+# 9. Build the package
 pyinit build
 
-# 11. Increment version
+# 10. Increment version
 pyinit release patch
 ```
 
@@ -219,30 +220,14 @@ pyinit release patch
 
 ```bash
 # Create a CLI application
-pyinit new my_cli --template cli
+pyinit create my_cli --template cli
 
 # Create a library package
-pyinit new my_lib --template library
+pyinit create my_lib --template library
 
 # Create a Flask web application
-pyinit new my_webapp --template flask
+pyinit create my_webapp --template flask
 ```
-
-### Docker Deployment
-
-```bash
-# Generate Docker files
-pyinit docker
-
-# Build Docker image
-docker build -t my_project .
-
-# Run container
-docker run my_project
-```
-
----
-
 ## 📁 Project Structure
 
 PyInit creates a clean, standardized project structure:
