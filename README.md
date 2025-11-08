@@ -9,7 +9,6 @@
 - **🎯 Zero-Config Project Scaffolding**: Launch production-ready projects in seconds with professional templates (app, cli, flask, lib)
 - **📦 Smart Dependency Management**: Add, lock, update, and visualize your project's dependencies effortlessly
 - **🔍 Automated Code Quality**: Format, lint, and test your code with unified, simple commands
-- **🪝 Git Hooks Integration**: Enforce code quality standards automatically before every commit
 - **🐍 Virtual Environment Management**: Create and remove isolated Python environments with explicit control
 - **🐳 Deployment Ready**: Generate Dockerfiles, release semantic versions, and clean your workspace instantly
 - **🔬 Intelligent Project Diagnostics**: Scan your project structure and configuration for issues with actionable suggestions
@@ -98,7 +97,7 @@ pyinit --help
 
 | Command | Description | Example |
 |---------|-------------|---------|
-| `docker` | Generate production-ready Dockerfile and .dockerignore | `pyinit dockerize` |
+| `docker` | Generate production-ready Dockerfile and .dockerignore | `pyinit docker` |
 | `release` | Increment project version (semantic versioning) | `pyinit release patch` |
 | `clean` | Remove temporary files and build artifacts | `pyinit clean` |
 | `scan` | Diagnose project structure and configuration issues | `pyinit scan` |
