@@ -15,6 +15,7 @@ import argparse
 import sys
 
 # Import handler functions for each command from their respective modules.
+from . import __version__
 from .add import add_module
 from .build import build_project
 from .check import check_project
@@ -63,6 +64,15 @@ def main():
         default="app",
         help="The project template to use (CLI | Library | Flask | default: app)",
     )
+
+    # '--version' command
+    parser.add_argument(
+        "-v",
+        "--version",
+        action="version",
+        version=f"%(prog)s {__version__}",
+        help="Show program's version number and exit",
+        )
 
     # 'run' command
     subparsers.add_parser("run", help="Run Your Project's Main File")
