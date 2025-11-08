@@ -6,7 +6,7 @@ pyinit - Your All-in-One Python Project Manager
 __version__ = "1.0.1"
 from .add import add_module
 from .build import build_project
-from .check import lint_project
+from .check import check_project
 from .clean import clean_project
 from .docker import gen_docker_files
 from .env import manage_env
@@ -30,7 +30,7 @@ __all__ = [
     "update_modules",
     "build_project",
     "run_tests",
-    "lint_project",
+    "check_project",
     "format_project",
     "show_dependency_graph",
     "clean_project",
@@ -39,6 +39,5 @@ __all__ = [
     "manage_venv",
     "gen_docker_files",
     "manage_env",
-    "add_git_hooks",
     "main",
 ]
