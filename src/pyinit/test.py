@@ -20,7 +20,7 @@ from .utils import (
     check_platform,
     check_project_root,
     check_venv_exists,
-    ensure_tool_installed, 
+    ensure_tool_installed,
     find_project_root,
 )
 from .wrappers import error_handling

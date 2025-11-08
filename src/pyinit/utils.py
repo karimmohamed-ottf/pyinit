@@ -11,8 +11,8 @@ project root, setting up logging, and parsing `pyproject.toml` for metadata.
 """
 
 import re
-import sys
 import subprocess
+import sys
 from pathlib import Path
 
 from rich.console import Console
@@ -125,6 +125,7 @@ def check_platform(venv_directory):
         pip_executable = venv_directory / "bin" / "pip"
     return pip_executable, python_executable
 
+
 def ensure_tool_installed(
     pip_executable: Path,
     python_executable: Path,
@@ -152,7 +153,9 @@ def ensure_tool_installed(
     is_installed = subprocess.run(check_cmd, capture_output=True).returncode == 0
 
     if not is_installed:
-        console.print(f"[bold green]     Installing[/bold green] Required Module '{tool_name}'")
+        console.print(
+            f"[bold green]     Installing[/bold green] Required Module '{tool_name}'"
+        )
         install_cmd = [str(pip_executable), "install", tool_name]
         try:
             subprocess.run(install_cmd, check=True, capture_output=True)
@@ -160,7 +163,9 @@ def ensure_tool_installed(
                 f"[bold green]      Successfully[/bold green] installed '{tool_name}'"
             )
         except subprocess.CalledProcessError as e:
-            console.print(f"[bold red][ERROR][/bold red] Failed to install {tool_name}.")
+            console.print(
+                f"[bold red][ERROR][/bold red] Failed to install {tool_name}."
+            )
             if e.stderr:
                 console.print(f"[red]{e.stderr.decode()}[/red]")
             sys.exit(1)
