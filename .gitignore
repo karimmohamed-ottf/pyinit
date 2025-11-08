@@ -1,4 +1,3 @@
-# Virtual Environment
 venv/
 __pycache__/
 **/__pycache__
@@ -12,4 +11,3 @@ build/
 docs/latex/
 .pytest_cache
 .ruff_cache
-"""

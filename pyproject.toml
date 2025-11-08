@@ -8,7 +8,7 @@ build-backend = "setuptools.build_meta"
 name = "pyinit"
 version = "1.0.5"
 authors = [
-    { name = "Karim", email = "daynews19@gmail.com" },
+    { name = "Karim", email = "kwkkna3@gmail.com" },
 ]
 description = "A tool for creating and managing Python projects"
 readme = "README.md"
