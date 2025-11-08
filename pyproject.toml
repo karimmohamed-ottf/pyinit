@@ -20,11 +20,7 @@ dependencies = [
     "importlib-resources",
 ]
 
-[project.optional-dependencies]
-dev = [
-    "pytest",
-    "pytest-mock",
-]
+
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
@@ -36,6 +32,12 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Topic :: Software Development :: Build Tools",
     "Topic :: Software Development :: Libraries :: Application Frameworks",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "pytest-mock",
 ]
 
 [project.urls]

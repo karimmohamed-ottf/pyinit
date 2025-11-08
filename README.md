@@ -61,6 +61,19 @@
 
 ## 📥 Installation
 
+## Install From PIP
+
+```bash
+pip install pyinit-tool
+```
+
+## Install From AUR (Arch Users Repository) using yay/paru
+
+```bash
+yay -S python-pyinit
+paru -S python-pyinit
+```
+
 ### Install from source
 
 ```bash
