@@ -50,7 +50,9 @@ def lint_project(lint_args: list = None):
         install_cmd = [str(pip_executable), "install", "ruff"]
         try:
             subprocess.run(install_cmd, check=True, capture_output=True)
-            console.print("[bold green]      Successfully[/bold green] installed 'ruff'")
+            console.print(
+                "[bold green]      Successfully[/bold green] installed 'ruff'"
+            )
         except subprocess.CalledProcessError as e:
             console.print("[bold red][ERROR][/bold red] Failed to install ruff.")
             console.print(f"[red]{e.stderr.decode()}[/red]")

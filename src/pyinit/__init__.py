@@ -10,18 +10,17 @@ from .bump import increase_version
 from .clean import clean_project
 from .docker import gen_docker_files
 from .env import manage_env
-from .main import main
 from .format import format_project
 from .hooks import add_git_hooks
 from .init import initialize_project
 from .lint import lint_project
+from .main import main
 from .new import create_project
 from .run import run_project
 from .scan import scan_project
 from .test import run_tests
 from .update import update_modules
 from .venv import manage_venv
-
 
 __all__ = [
     "create_project",

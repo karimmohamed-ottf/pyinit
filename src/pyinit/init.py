@@ -8,7 +8,7 @@ from pathlib import Path
 
 from rich.console import Console
 
-from .new import TEMPLATES_BASE_DIR, process_template, get_git_config
+from .new import TEMPLATES_BASE_DIR, get_git_config, process_template
 from .wrappers import error_handling
 
 
