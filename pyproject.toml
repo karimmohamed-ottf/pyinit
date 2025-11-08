@@ -38,7 +38,7 @@ where = [
 ]
 
 [tool.setuptools.data-files]
-"share/pyinit" = ["src/pyinit/_templates/default_pyproject.toml"]
+"share/pyinit" = ["src/pyinit/_templates/pyproject.toml"]
 
 [tool.pytest.ini_options]
 pythonpath = [
