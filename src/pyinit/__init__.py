@@ -3,7 +3,7 @@ pyinit - Your All-in-One Python Project Manager
 
 """
 
-__version__ = "1.0.4"
+__version__ = "1.0.5"
 from .build import build_project
 from .check import check_project
 from .clean import clean_project
