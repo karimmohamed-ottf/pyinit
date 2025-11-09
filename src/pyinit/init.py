@@ -21,7 +21,7 @@ from pathlib import Path
 
 from rich.console import Console
 
-from .create import TEMPLATE_PATH, get_git_config
+from .create import get_git_config
 from .wrappers import error_handling
 
 # Use importlib.resources to access package data in a cross-platform way.
