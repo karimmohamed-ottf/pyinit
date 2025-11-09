@@ -147,27 +147,19 @@ def ensure_tool_installed(
     :param Console console: The rich Console instance for printing messages.
     :raises SystemExit: If the installation of the tool fails.
     """
-    console.print(f"[bold green]    Checking[/bold green] for '{tool_name}'")
 
     check_cmd = [str(python_executable), "-c", f"import {import_name}"]
     is_installed = subprocess.run(check_cmd, capture_output=True).returncode == 0
 
     if not is_installed:
         console.print(
-            f"[bold green]     Installing[/bold green] Required Module '{tool_name}'"
+            f"[bold green]      Installing[/bold green] Required Module '{tool_name}'"
         )
         install_cmd = [str(pip_executable), "install", tool_name]
-        try:
-            subprocess.run(install_cmd, check=True, capture_output=True)
-            console.print(
-                f"[bold green]      Successfully[/bold green] installed '{tool_name}'"
-            )
-        except subprocess.CalledProcessError as e:
-            console.print(
-                f"[bold red][ERROR][/bold red] Failed to install {tool_name}."
-            )
-            if e.stderr:
-                console.print(f"[red]{e.stderr.decode()}[/red]")
-            sys.exit(1)
+
+        subprocess.run(install_cmd, check=True, capture_output=True)
+        console.print(
+            f"[bold green]       Successfully[/bold green] installed '{tool_name}'"
+        )
     else:
         console.print(f"[bold green]     Found[/bold green] Module '{tool_name}'")

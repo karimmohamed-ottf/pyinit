@@ -16,15 +16,8 @@ import shutil
 import subprocess
 import sys
 import venv
+from importlib.resources import files as resources_files
 from pathlib import Path
-
-# Use importlib.resources to access package data in a cross-platform way.
-# This avoids hardcoded paths and makes the tool distributable.
-try:
-    from importlib.resources import files as resources_files
-except ImportError:
-    # Fallback for Python < 3.9, requires 'importlib-resources' backport
-    from importlib_resources import files as resources_files
 
 from rich.console import Console
 
@@ -90,14 +83,9 @@ def create_project(project_path: str):
         (project_root / "README.md").write_text(f"# {project_name}\n")
 
         # --- Generate pyproject.toml ---
-        try:
-            # Access the template file packaged with the tool itself.
-            template_ref = resources_files("pyinit._templates").joinpath("pyproject.toml")
-            template_content = template_ref.read_text(encoding="utf-8")
-        except Exception as e:
-            console.print(f"[bold red][ERROR][/bold red] Could not load internal project template: {e}")
-            console.print("[dim]       - Ensure pyinit is installed correctly and package data is included.[/dim]")
-            sys.exit(1)
+        # Access the template file packaged with the tool itself.
+        template_ref = resources_files("pyinit._templates").joinpath("pyproject.toml")
+        template_content = template_ref.read_text(encoding="utf-8")
 
         author_name = get_git_config("user.name") or "Your Name"
         author_email = get_git_config("user.email") or "you@example.com"

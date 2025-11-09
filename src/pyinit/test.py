@@ -86,13 +86,7 @@ def run_tests(pytest_args: list = None):
     # Construct the command to run pytest as a module.
     run_tests_cmd = [str(python_executable), "-m", "pytest"] + pytest_args
 
-    try:
-        # Execute pytest. CWD is set to project root for consistent path discovery.
-        # Output is streamed directly to the console.
-        subprocess.run(run_tests_cmd, cwd=project_root)
-        console.print("\n[bold green]Testing[/bold green] process completed.")
-    except Exception as e:
-        console.print(
-            f"[bold red][ERROR][/bold red] An unexpected error occurred while running tests: {e}"
-        )
-        sys.exit(1)
+    # Execute pytest. CWD is set to project root for consistent path discovery.
+    # Output is streamed directly to the console.
+    subprocess.run(run_tests_cmd, cwd=project_root)
+    console.print("\n[bold green]Testing[/bold green] process completed.")

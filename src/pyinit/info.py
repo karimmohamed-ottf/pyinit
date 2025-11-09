@@ -12,7 +12,6 @@ and virtual environment, and status information from the Git repository to
 provide a complete project dashboard.
 """
 
-import datetime
 import subprocess
 import sys
 from pathlib import Path
@@ -110,12 +109,7 @@ def get_project_stats(project_root: Path) -> tuple[int, int, str]:
             except Exception:
                 continue
 
-    last_modified = (
-        datetime.datetime.fromtimestamp(latest_mod_time).strftime("%Y-%m-%d %H:%M:%S")
-        if latest_mod_time > 0
-        else "[dim]N/A[/dim]"
-    )
-    return total_files, total_lines, last_modified
+    return total_files, total_lines
 
 
 @error_handling
@@ -153,10 +147,7 @@ def project_info():
     # --- Data Gathering ---
     # Collect all necessary information from different sources before printing.
     venv_python, venv_packages = get_venv_info(project_root)
-    files, lines, last_mod = get_project_stats(project_root)
-    creation_time = datetime.datetime.fromtimestamp(
-        project_root.stat().st_ctime
-    ).strftime("%Y-%m-%d %H:%M:%S")
+    files, lines = get_project_stats(project_root)
     branch = run_command(["git", "branch", "--show-current"], project_root)
 
     # --- Formatted Output ---
@@ -177,8 +168,6 @@ def project_info():
     console.print(f"  License        : {license_text or '[dim]N/A[/dim]'}")
 
     console.print(f"  Project Path   : {project_root}")
-    console.print(f"  Created On     : [dim white]{creation_time}[/]")
-    console.print(f"  Last Modified  : [dim white]{last_mod}[/] (in src)")
     console.print(
         f"  Python Req.    : {project_data.get('requires-python', '[dim]N/A[/dim]')}"
     )
@@ -188,9 +177,6 @@ def project_info():
     console.print(f"  Lines (in src) : {lines:,}")
 
     if branch is not None:
-        latest_commit = run_command(
-            ["git", "log", "-1", "--pretty=%h (%cr): %s"], project_root
-        )
         status_output = run_command(["git", "status", "--porcelain"], project_root)
         status = (
             "[green]Clean[/]"
@@ -199,7 +185,6 @@ def project_info():
         )
 
         console.print(f"  Branch         : [bold yellow]{branch}[/]")
-        console.print(f"  Last Commit    : {latest_commit}")
         console.print(f"  Status         : {status}")
     else:
         console.print("  [dim]Not a Git repository.[/dim]")

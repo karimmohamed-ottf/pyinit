@@ -70,20 +70,8 @@ def run_project(app_args: list = None):
 
     console.print(f"[bold green]    Running[/bold green] package '{project_name}'")
 
-    try:
-        # Construct the full command, including the Python interpreter,
-        # the script path, and any passthrough arguments.
-        run_cmd = [str(python_executable), str(main_file)] + app_args
-        # Execute the command. Output is streamed directly to the console.
-        subprocess.run(run_cmd, check=True)
-    except FileNotFoundError:
-        # This error typically occurs if the venv is corrupted and the
-        # Python executable itself is missing.
-        console.print(
-            f"\n[bold red][ERROR][/bold red] Python Executable '{python_executable}' Not Found\n-> The venv might be corrupted."
-        )
-        sys.exit(1)
-    except subprocess.CalledProcessError as e:
-        # This error occurs if the user's script exits with a non-zero status code.
-        # The error is printed to inform the user about the script's failure.
-        console.print(f"\n[bold red][ERROR][/bold red] {e}")
+    # Construct the full command, including the Python interpreter,
+    # the script path, and any passthrough arguments.
+    run_cmd = [str(python_executable), str(main_file)] + app_args
+    # Execute the command. Output is streamed directly to the console.
+    subprocess.run(run_cmd, check=True)

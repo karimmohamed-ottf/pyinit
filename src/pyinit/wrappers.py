@@ -19,7 +19,11 @@ def error_handling(func):
         try:
             func(*args, **kwargs)
         except (KeyboardInterrupt, EOFError):
-            console.print("[red]\n-> [ERROR]: Interrupted By The User")
+            console.print("[red]\n-> [ERROR] Interrupted By The User")
+            sys.exit(1)
+        except Exception as e:
+            # A general catch-all for other potential issues (e.g., file permissions).
+            console.print(f"[bold red][ERROR][/bold red] -> {e}")
             sys.exit(1)
 
     return wrapper

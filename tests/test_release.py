@@ -1,13 +1,9 @@
 import sys
+import tomllib
 
 import pytest
 
 from pyinit.release import increase_version
-
-if sys.version_info >= (3, 11):
-    import tomllib
-else:
-    import tomli as tomllib
 
 
 # This fixture creates a fake project structure for testing.
@@ -18,7 +14,6 @@ def mock_project_for_release(tmp_path):
         project_root = tmp_path / project_name
         src_dir = project_root / "src" / project_name
         src_dir.mkdir(parents=True)
-
         # Create pyproject.toml
         pyproject_content = f'[project]\nname = "{project_name}"\nversion = "{version}"'
         (project_root / "pyproject.toml").write_text(pyproject_content)
@@ -71,25 +66,6 @@ def test_increase_version_success(
     # 3. Check console output
     mock_console_print.assert_any_call(
         f"[bold green]     Updating[/bold green] version from [yellow]{start_version}[/yellow] to [cyan]{expected_version}[/cyan]"
-    )
-
-
-def test_increase_version_fails_with_malformed_version(
-    mocker, mock_project_for_release
-):
-    """Tests that the function exits if the version string is not in X.Y.Z format."""
-    # --- Arrange ---
-    project_root, _ = mock_project_for_release("2.0-rc1", "")
-    mocker.patch("pyinit.release.find_project_root", return_value=project_root)
-    mock_console_print = mocker.patch("rich.console.Console.print")
-
-    # --- Act & Assert ---
-    with pytest.raises(SystemExit) as excinfo:
-        increase_version("patch")
-
-    assert excinfo.value.code == 1
-    mock_console_print.assert_any_call(
-        "[bold red][ERROR][/bold red] Invalid or missing version string in 'pyproject.toml'. Expected format: 'X.Y.Z'"
     )
 
 

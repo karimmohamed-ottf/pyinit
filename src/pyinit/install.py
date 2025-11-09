@@ -81,19 +81,14 @@ def install_modules(modules_to_install: list):
     pip_executable, _ = check_platform(venv_dir)
 
     # --- Verify which packages are already installed ---
-    try:
-        freeze_result = subprocess.run(
-            [str(pip_executable), "freeze"], check=True, capture_output=True, text=True
-        )
-        installed_packages = {
-            line.split("==")[0].lower().replace("-", "_")
-            for line in freeze_result.stdout.strip().split("\n")
-        }
-    except Exception:
-        console.print(
-            "[bold red][ERROR][/bold red] Could not list installed packages from venv."
-        )
-        sys.exit(1)
+
+    freeze_result = subprocess.run(
+        [str(pip_executable), "freeze"], check=True, capture_output=True, text=True
+    )
+    installed_packages = {
+        line.split("==")[0].lower().replace("-", "_")
+        for line in freeze_result.stdout.strip().split("\n")
+    }
 
     # Filter the user's list to only include packages that are not already installed.
     packages_to_actually_install = []
@@ -124,27 +119,15 @@ def install_modules(modules_to_install: list):
     modules_str = ", ".join(f"'{m}'" for m in packages_to_actually_install)
     console.print(f"[bold green]    Installing[/bold green] module(s) {modules_str}")
 
-    try:
-        install_cmd = [str(pip_executable), "install"] + packages_to_actually_install
-        subprocess.run(
-            install_cmd,
-            check=True,
-            capture_output=True,
-        )
-        console.print(
-            f"[bold green]Successfully[/bold green] Installed {len(packages_to_actually_install)} new package(s)."
-        )
+    install_cmd = [str(pip_executable), "install"] + packages_to_actually_install
+    subprocess.run(
+        install_cmd,
+        check=True,
+        capture_output=True,
+    )
+    console.print(
+        f"[bold green]Successfully[/bold green] Installed {len(packages_to_actually_install)} new package(s)."
+    )
 
-        # --- Update Lock File ---
-        update_requirements(project_root, pip_executable, console)
-
-    except subprocess.CalledProcessError as e:
-        console.print("\n[bold red][ERROR][/bold red] Failed to install packages.")
-        if e.stderr:
-            console.print(f"[dim red]{e.stderr.decode().strip()}[/dim red]")
-        sys.exit(1)
-    except Exception as e:
-        console.print(
-            f"\n[bold red][ERROR][/bold red] An unexpected error occurred: {e}"
-        )
-        sys.exit(1)
+    # --- Update Lock File ---
+    update_requirements(project_root, pip_executable, console)

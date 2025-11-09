@@ -54,21 +54,15 @@ def uninstall_modules(modules_to_uninstall: list):
     pip_executable, _ = check_platform(venv_dir)
 
     # --- Verify which packages are actually installed ---
-    try:
-        freeze_result = subprocess.run(
-            [str(pip_executable), "freeze"], check=True, capture_output=True, text=True
-        )
-        # Create a set of normalized installed package names for fast lookups.
-        installed_packages = {
-            line.split("==")[0].lower().replace("-", "_")
-            for line in freeze_result.stdout.strip().split("\n")
-        }
-    except Exception:
-        console.print(
-            "[bold red][ERROR][/bold red] Could not list installed packages from venv."
-        )
-        sys.exit(1)
 
+    freeze_result = subprocess.run(
+        [str(pip_executable), "freeze"], check=True, capture_output=True, text=True
+    )
+    # Create a set of normalized installed package names for fast lookups.
+    installed_packages = {
+        line.split("==")[0].lower().replace("-", "_")
+        for line in freeze_result.stdout.strip().split("\n")
+    }
     # Filter the user's list to only include packages that are actually installed.
     packages_to_actually_uninstall = []
     for module in modules_to_uninstall:
@@ -88,47 +82,27 @@ def uninstall_modules(modules_to_uninstall: list):
         f"[bold green]->[/] The following packages will be uninstalled: {modules_str}"
     )
 
-    try:
-        confirm = console.input("Are you sure you want to proceed? (y/N): ")
-        if confirm.lower() != "y":
-            console.print(
-                "[bold yellow][INFO][/bold yellow] Operation cancelled by user."
-            )
-            sys.exit(0)
-    except (KeyboardInterrupt, EOFError):
-        console.print(
-            "\n[bold yellow][INFO][/bold yellow] Operation cancelled by user."
-        )
+    confirm = console.input("Are you sure you want to proceed? (y/N): ")
+    if confirm.lower() != "y":
+        console.print("[bold yellow][INFO][/bold yellow] Operation cancelled by user.")
         sys.exit(0)
 
     # --- Uninstallation Process ---
     console.print(f"[bold green]    Uninstalling[/bold green] {modules_str}")
 
-    try:
-        uninstall_cmd = [
-            str(pip_executable),
-            "uninstall",
-            "-y",
-        ] + packages_to_actually_uninstall
-        subprocess.run(
-            uninstall_cmd,
-            check=True,
-            capture_output=True,
-        )
-        console.print(
-            f"[bold green]Successfully[/bold green] Uninstalled {len(packages_to_actually_uninstall)} package(s)."
-        )
+    uninstall_cmd = [
+        str(pip_executable),
+        "uninstall",
+        "-y",
+    ] + packages_to_actually_uninstall
+    subprocess.run(
+        uninstall_cmd,
+        check=True,
+        capture_output=True,
+    )
+    console.print(
+        f"[bold green]Successfully[/bold green] Uninstalled {len(packages_to_actually_uninstall)} package(s)."
+    )
 
-        # --- Update Lock File ---
-        update_requirements(project_root, pip_executable, console)
-
-    except subprocess.CalledProcessError as e:
-        console.print("\n[bold red][ERROR][/bold red] Failed to uninstall packages.")
-        if e.stderr:
-            console.print(f"[dim red]{e.stderr.decode().strip()}[/dim red]")
-        sys.exit(1)
-    except Exception as e:
-        console.print(
-            f"\n[bold red][ERROR][/bold red] An unexpected error occurred: {e}"
-        )
-        sys.exit(1)
+    # --- Update Lock File ---
+    update_requirements(project_root, pip_executable, console)

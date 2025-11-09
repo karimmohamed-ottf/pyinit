@@ -27,7 +27,6 @@ from .init import initialize_project
 from .install import install_modules
 from .release import increase_version
 from .run import run_project
-from .scan import scan_project
 from .test import run_tests
 from .uninstall import uninstall_modules
 from .update import update_modules
@@ -145,11 +144,6 @@ def main():
         "--upgrade", action="store_true", help="Upgrade venv modules"
     )
 
-    # 'scan' command
-    subparsers.add_parser(
-        "scan", help="Scan the project for configuration and structure issues"
-    )
-
     # 'info' command
     subparsers.add_parser("info", help="Display information about the current project")
 
@@ -196,8 +190,6 @@ def main():
             increase_version(args.part)
         case "update":
             update_modules(args.upgrade)
-        case "scan":
-            scan_project()
         case "info":
             project_info()
 

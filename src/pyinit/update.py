@@ -56,16 +56,13 @@ def update_modules(upgrade: bool = False):
     # --- Step 1: Always check for outdated packages first ---
     console.print("[bold green]    Checking[/bold green] for new module(s) versions")
     check_cmd = [str(pip_executable), "list", "--outdated"]
-    try:
-        outdated_result = subprocess.run(check_cmd, capture_output=True, text=True)
-        # Pip's `list --outdated` returns a non-zero exit code if it finds nothing,
-        # so we check the output content instead of the return code.
-        # The output header is 2 lines long.
-        outdated_packages_output = outdated_result.stdout.strip()
-        has_updates = len(outdated_packages_output.splitlines()) > 2
-    except Exception as e:
-        console.print(f"[bold red][ERROR][/bold red] Failed to check for updates: {e}")
-        sys.exit(1)
+
+    outdated_result = subprocess.run(check_cmd, capture_output=True, text=True)
+    # Pip's `list --outdated` returns a non-zero exit code if it finds nothing,
+    # so we check the output content instead of the return code.
+    # The output header is 2 lines long.
+    outdated_packages_output = outdated_result.stdout.strip()
+    has_updates = len(outdated_packages_output.splitlines()) > 2
 
     # --- Step 2: Decide action based on check results ---
     if not has_updates:
@@ -85,24 +82,15 @@ def update_modules(upgrade: bool = False):
             f"[bold green]     Found[/bold green] {len(packages_to_upgrade)} module(s) to upgrade."
         )
 
-        try:
-            upgrade_cmd = [
-                str(pip_executable),
-                "install",
-                "--upgrade",
-            ] + packages_to_upgrade
-            subprocess.run(upgrade_cmd, check=True)
-            console.print(
-                "\n[bold green]Successfully[/bold green] upgraded all modules."
-            )
-            # Update the lock file after a successful upgrade.
-            update_requirements(project_root, pip_executable, console)
-
-        except subprocess.CalledProcessError as e:
-            console.print("[bold red][ERROR][/bold red] Failed to upgrade modules.")
-            if e.stderr:
-                console.print(f"[red]{e.stderr.decode()}[/red]")
-            sys.exit(1)
+        upgrade_cmd = [
+            str(pip_executable),
+            "install",
+            "--upgrade",
+        ] + packages_to_upgrade
+        subprocess.run(upgrade_cmd, check=True)
+        console.print("\n[bold green]Successfully[/bold green] upgraded all modules.")
+        # Update the lock file after a successful upgrade.
+        update_requirements(project_root, pip_executable, console)
 
     else:
         # --- Check-Only Mode ---

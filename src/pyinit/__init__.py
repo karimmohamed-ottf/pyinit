@@ -15,7 +15,6 @@ from .init import initialize_project
 from .install import install_modules
 from .release import increase_version
 from .run import run_project
-from .scan import scan_project
 from .test import run_tests
 from .uninstall import uninstall_modules
 from .update import update_modules
@@ -35,7 +34,6 @@ __all__ = [
     "format_project",
     "show_dependency_graph",
     "clean_project",
-    "scan_project",
     "increase_version",
     "manage_venv",
     "project_info",

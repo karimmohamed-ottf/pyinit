@@ -69,17 +69,11 @@ def create_virtual_env(console: Console, venv_dir: Path):
         )
         sys.exit(1)
 
-    try:
-        # Use Python's built-in venv module to create the environment.
-        venv.create(venv_dir, with_pip=True)
-        console.print(
-            "\n[bold green]Successfully[/bold green] created virtual environment."
-        )
-    except Exception as e:
-        console.print(
-            f"[bold red][ERROR][/bold red] Failed to create virtual environment: {e}"
-        )
-        sys.exit(1)
+    # Use Python's built-in venv module to create the environment.
+    venv.create(venv_dir, with_pip=True)
+    console.print(
+        "[bold green]Successfully[/bold green] created virtual environment."
+    )
 
 
 def remove_virtual_env(console: Console, venv_dir: Path):
@@ -103,27 +97,19 @@ def remove_virtual_env(console: Console, venv_dir: Path):
         )
         sys.exit(1)
 
-    try:
-        # Prompt the user for confirmation due to the destructive nature of the action.
-        confirm = console.input(
-            "[bold red][CRITICAL][/bold red] This is a destructive action. Are you sure you want to remove the entire 'venv' directory? (y/N): "
-        )
-        if confirm.lower() == "y":
-            console.print(
-                f"[bold green]      Deleting[/bold green] directory '{venv_dir.name}'"
-            )
-            # Recursively delete the directory and all its contents.
-            shutil.rmtree(venv_dir)
-            console.print(
-                "\n[bold green]Successfully[/bold green] removed virtual environment."
-            )
-        else:
-            console.print(
-                "[bold yellow][INFO][/bold yellow] Operation cancelled by user."
-            )
-            sys.exit(0)
-    except Exception as e:
+    # Prompt the user for confirmation due to the destructive nature of the action.
+    confirm = console.input(
+        "[bold red][CRITICAL][/bold red] This is a destructive action. Are you sure you want to remove the entire 'venv' directory? (y/N): "
+    )
+    if confirm.lower() == "y":
         console.print(
-            f"[bold red][ERROR][/bold red] Failed to remove virtual environment: {e}"
+            f"[bold green]      Deleting[/bold green] directory '{venv_dir.name}'"
         )
-        sys.exit(1)
+        # Recursively delete the directory and all its contents.
+        shutil.rmtree(venv_dir)
+        console.print(
+            "[bold green]Successfully[/bold green] removed virtual environment."
+        )
+    else:
+        console.print("[bold yellow][INFO][/bold yellow] Operation cancelled by user.")
+        sys.exit(0)

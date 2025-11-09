@@ -14,7 +14,7 @@ writes the new version back to both `pyproject.toml` and the package's
 """
 
 import re
-import sys
+import tomllib
 from pathlib import Path
 
 import tomli_w
@@ -22,13 +22,6 @@ from rich.console import Console
 
 from .utils import check_project_root, find_project_root, get_project_name
 from .wrappers import error_handling
-
-# Conditional import of TOML library for Python version compatibility.
-# `tomllib` is standard in Python 3.11+, `tomli` is used for older versions.
-if sys.version_info >= (3, 11):
-    import tomllib
-else:
-    import tomli as tomllib
 
 
 def update_init_version(
@@ -94,63 +87,46 @@ def increase_version(part: str):
     pyproject_path = project_root / "pyproject.toml"
 
     # --- Read and Parse pyproject.toml ---
-    try:
-        with open(pyproject_path, "rb") as f:
-            data = tomllib.load(f)
-    except (tomllib.TOMLDecodeError, FileNotFoundError):
-        console.print(
-            f"[bold red][ERROR][/bold red] Could not read or parse '{pyproject_path.name}'."
-        )
-        sys.exit(1)
+
+    with open(pyproject_path, "rb") as f:
+        data = tomllib.load(f)
 
     console.print("[bold green]    Setting[/bold green] project version to new release")
 
     # --- Version Calculation ---
-    try:
-        old_version = data["project"]["version"]
-        major, minor, patch = map(int, old_version.split("."))
-    except (KeyError, ValueError):
-        console.print(
-            f"[bold red][ERROR][/bold red] Invalid or missing version string in '{pyproject_path.name}'. Expected format: 'X.Y.Z'"
-        )
-        sys.exit(1)
-    else:
-        # Increment the version based on the specified part, following SemVer rules.
-        if part == "major":
-            major += 1
-            minor = 0
-            patch = 0
-        elif part == "minor":
-            minor += 1
-            patch = 0
-        elif part == "patch":
-            patch += 1
 
-        new_version = f"{major}.{minor}.{patch}"
+    old_version = data["project"]["version"]
+    major, minor, patch = map(int, old_version.split("."))
+    # Increment the version based on the specified part, following SemVer rules.
+    if part == "major":
+        major += 1
+        minor = 0
+        patch = 0
+    elif part == "minor":
+        minor += 1
+        patch = 0
+    elif part == "patch":
+        patch += 1
 
-        # --- Update pyproject.toml ---
-        data["project"]["version"] = new_version
-        try:
-            with open(pyproject_path, "wb") as f:
-                tomli_w.dump(data, f)
-        except Exception as e:
-            console.print(
-                f"[bold red][ERROR][/bold red] Failed to write updated version to '{pyproject_path.name}': {e}"
-            )
-            sys.exit(1)
+    new_version = f"{major}.{minor}.{patch}"
 
-        # --- Update __init__.py ---
-        project_name = get_project_name(project_root)
-        init_updated = update_init_version(project_root, project_name, new_version)
+    # --- Update pyproject.toml ---
+    data["project"]["version"] = new_version
+    with open(pyproject_path, "wb") as f:
+        tomli_w.dump(data, f)
 
-        # --- Final User Feedback ---
-        console.print(
-            f"[bold green]     Updating[/bold green] version from [yellow]{old_version}[/yellow] to [cyan]{new_version}[/cyan]"
-        )
+    # --- Update __init__.py ---
+    project_name = get_project_name(project_root)
+    init_updated = update_init_version(project_root, project_name, new_version)
 
-        if not init_updated:
-            pass
+    # --- Final User Feedback ---
+    console.print(
+        f"[bold green]     Updating[/bold green] version from [yellow]{old_version}[/yellow] to [cyan]{new_version}[/cyan]"
+    )
 
-        console.print(
-            "\n[bold green]Successfully[/bold green] Released New project version."
-        )
+    if not init_updated:
+        pass
+
+    console.print(
+        "\n[bold green]Successfully[/bold green] Released New project version."
+    )

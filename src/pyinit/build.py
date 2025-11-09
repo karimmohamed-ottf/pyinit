@@ -13,7 +13,6 @@ and source distributions (sdist).
 """
 
 import subprocess
-import sys
 
 from rich.console import Console
 
@@ -62,42 +61,29 @@ def build_project():
     # --- Determine Platform-specific Executables ---
     # The paths to executables within the venv differ based on the OS.
     pip_executable, python_executable = check_platform(venv_dir)
-    try:
-        # --- Step 1: Install Build Dependencies ---
-        # Ensure that the PEP 517 build frontend and backend tools are installed.
-        console.print(
-            "[bold green]    Fetching[/bold green] Required Build Modules: 'build', 'wheel'"
-        )
-        subprocess.run(
-            [str(pip_executable), "install", "build", "wheel"],
-            check=True,
-            capture_output=True,
-        )
+    # --- Step 1: Install Build Dependencies ---
+    # Ensure that the PEP 517 build frontend and backend tools are installed.
+    console.print(
+        "[bold green]    Fetching[/bold green] Required Build Modules: 'build', 'wheel'"
+    )
+    subprocess.run(
+        [str(pip_executable), "install", "build", "wheel"],
+        check=True,
+        capture_output=True,
+    )
 
-        # --- Step 2: Execute the Build ---
-        # Run the standard build process. This reads `pyproject.toml` and
-        # creates the sdist and wheel in the `dist/` directory.
-        console.print(
-            f"[bold green]     Building[/bold green] package '{project_name}'"
-        )
-        subprocess.run(
-            [str(python_executable), "-m", "build"],
-            cwd=project_root,
-            check=True,
-            capture_output=True,
-        )
+    # --- Step 2: Execute the Build ---
+    # Run the standard build process. This reads `pyproject.toml` and
+    # creates the sdist and wheel in the `dist/` directory.
+    console.print(f"[bold green]     Building[/bold green] package '{project_name}'")
+    subprocess.run(
+        [str(python_executable), "-m", "build"],
+        cwd=project_root,
+        check=True,
+        capture_output=True,
+    )
 
-        console.print(
-            f"[bold green]\nSuccessfully[/bold green] built package '{project_name}'"
-        )
-        console.print("[bold green]->[/] Check 'dist/' for results")
-
-    except subprocess.CalledProcessError as e:
-        # This catches errors specifically from the subprocess calls,
-        # such as a build failure.
-        console.print(f"[bold red][ERROR][/bold red] {e}")
-        sys.exit(1)
-    except Exception as e:
-        # A general catch-all for other potential issues (e.g., file permissions).
-        console.print(f"[bold red][ERROR][/bold red] {e}")
-        sys.exit(1)
+    console.print(
+        f"[bold green]\nSuccessfully[/bold green] built package '{project_name}'"
+    )
+    console.print("[bold green]->[/] Check 'dist/' for results")

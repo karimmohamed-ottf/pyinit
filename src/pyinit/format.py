@@ -56,7 +56,9 @@ def format_project():
 
     # --- Ensure Formatters are Installed ---
     # Use the shared utility to check for and install each required formatter.
-    console.print("[bold green]    Checking[/bold green] for formatting tools...")
+    console.print(
+        "[bold green]    Checking[/bold green] for formatting modules 'black' and 'isort'"
+    )
     ensure_tool_installed(pip_executable, python_executable, "black", "black", console)
     ensure_tool_installed(pip_executable, python_executable, "isort", "isort", console)
 
@@ -65,7 +67,7 @@ def format_project():
     targets_to_format = [project_root / "src", project_root / "tests"]
     formatted_something = False
 
-    console.print("[bold green]     Formatting[/bold green] codebase...")
+    console.print("[bold green]      Formatting[/bold green] codebase")
     for target_dir in targets_to_format:
         if target_dir.exists() and target_dir.is_dir():
             # Define commands for isort (sorts imports) and black (formats code).

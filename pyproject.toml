@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pyinit-tool"
-version = "1.0.13"
+version = "1.0.14"
 authors = [
     { name = "Karim", email = "kwkkna3@gmail.com" },
 ]
@@ -35,7 +35,9 @@ where = [
 ]
 
 [tool.setuptools.package-data]
-pyinit = ["_templates/*.toml"]
+pyinit = [
+    "_templates/*.toml",
+]
 
 [tool.pytest.ini_options]
 pythonpath = [

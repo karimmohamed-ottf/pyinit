@@ -44,10 +44,7 @@ def clean_project():
     patterns_to_remove = [
         "__pycache__",
         ".pytest_cache",
-        "build",
         "dist",
-        "*.egg-info",
-        ".coverage",
     ]
 
     # --- Search Phase ---
@@ -75,18 +72,9 @@ def clean_project():
         relative_path = path.relative_to(project_root)
         console.print(f"  - {relative_path}")
 
-    try:
-        confirm = console.input("\n - Are you sure you want to proceed? (y/N): ")
-        if confirm.lower() != "y":
-            console.print(
-                "[bold yellow][INFO][/bold yellow] Operation cancelled by user."
-            )
-            sys.exit(0)
-    except (KeyboardInterrupt, EOFError):
-        # Handle cases where the user interrupts the input prompt (e.g., Ctrl+C).
-        console.print(
-            "\n[bold yellow][WARNING][/bold yellow] Operation cancelled by user."
-        )
+    confirm = console.input("\n - Are you sure you want to proceed? (y/N): ")
+    if confirm.lower() != "y":
+        console.print("[bold yellow][INFO][/bold yellow] Operation cancelled by user.")
         sys.exit(0)
 
     # --- Deletion Phase ---
@@ -95,16 +83,11 @@ def clean_project():
 
     deleted_count = 0
     for path in paths_to_remove:
-        try:
-            if path.is_dir():
-                shutil.rmtree(path)
-            else:
-                path.unlink()
-            deleted_count += 1
-        except OSError as e:
-            # Report any errors during deletion but continue with other files.
-            console.print(f"[bold red][ERROR][/bold red] Could not remove {path}: {e}")
-
+        if path.is_dir():
+            shutil.rmtree(path)
+        else:
+            path.unlink()
+        deleted_count += 1
     console.print(
         f"\n[bold green]Successfully[/bold green] removed {deleted_count} items."
     )
