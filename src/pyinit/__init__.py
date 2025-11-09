@@ -38,8 +38,6 @@ __all__ = [
     "scan_project",
     "increase_version",
     "manage_venv",
-    "gen_docker_files",
-    "manage_env",
     "project_info",
     "main",
     "error_handling",
