@@ -41,7 +41,6 @@ __all__ = [
     "gen_docker_files",
     "manage_env",
     "project_info",
-    "add_git_hooks",
     "main",
     "error_handling",
 ]

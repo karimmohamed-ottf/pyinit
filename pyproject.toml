@@ -29,16 +29,13 @@ dev = [
 [project.scripts]
 pyinit = "pyinit.main:main"
 
-[tool.setuptools]
-include-package-data = true
-
 [tool.setuptools.packages.find]
 where = [
     "src",
 ]
 
-[tool.setuptools.data-files]
-"share/pyinit" = ["src/pyinit/_templates/pyproject.toml"]
+[tool.setuptools.package-data]
+pyinit = ["_templates/*.toml"]
 
 [tool.pytest.ini_options]
 pythonpath = [
